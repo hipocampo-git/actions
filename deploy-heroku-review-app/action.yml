@@ -1,4 +1,4 @@
-name: Heroku Review Application
+name: Deploy Heroku Review App
 description: Create a Heroku review app when a PR is raised by someone with write or admin access
 runs:
   using: docker
