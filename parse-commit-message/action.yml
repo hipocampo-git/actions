@@ -1,22 +1,22 @@
-name: "Open Github Issue"
+name: "Parse Commit Message"
 author: "Oliver Pike"
-description: "Opens a github issue"
+description: "Parses commit messages to extract data like the pull request id"
 inputs:
-  token:
-    description: "Github Token"
+  commit-message:
+    description: "commit message to parse"
     required: true
-  title:
-    description: "Issue Title"
-    required: true
-  body:
-    description: "Issue Body"
-    required: false
-  assignees:
-    description: "Issue Assignees"
-    required: false
+#  title:
+#    description: "Issue Title"
+#    required: true
+#  body:
+#    description: "Issue Body"
+#    required: false
+#  assignees:
+#    description: "Issue Assignees"
+#    required: false
 outputs:
-  issue: # id of output
-    description: "The issue object as a json string"
+  pull-request-id:
+    description: "pull request id extracted from the commit message"
 runs:
   using: "node12"
   main: "dist/index.js"
