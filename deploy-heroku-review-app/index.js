@@ -184,7 +184,8 @@ Toolkit.run(
       "pull_request_target.reopened",
       "pull_request_target.synchronize",
       "pull_request_target.labeled",
-      "pull_request_target.closed"
+      "pull_request_target.closed",
+      "push"
     ],
     secrets: ["GITHUB_TOKEN", "GITHUB_PA_TOKEN", "HEROKU_API_TOKEN", "HEROKU_PIPELINE_ID"],
   }
