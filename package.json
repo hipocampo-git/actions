@@ -6,7 +6,6 @@
     "start": "node ./index.js",
     "test": "jest",
     "build": "npx @vercel/ncc build && npx convert-action",
-    "actions:buildxx": "npx ncc build .github/actions/checklabel/index.js -o .github/actions/checklabel/dist",
     "actions:build": "npx ncc build parse-commit-message/index.js -o parse-commit-message/dist"
   },
   "dependencies": {
