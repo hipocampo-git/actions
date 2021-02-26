@@ -5,6 +5,9 @@ inputs:
   commit-message:
     description: "commit message to parse"
     required: true
+  token:
+    description: "Github Token"
+    required: true
 #  title:
 #    description: "Issue Title"
 #    required: true
