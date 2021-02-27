@@ -154,15 +154,15 @@ Toolkit.run(
         return;
       }
 
-      try {
-        const resp = await heroku.request({
-          path: `/review-apps${id}`,
-          method: "DELETE"
-        });
-      } catch (error) {
-        tools.log.debug('Delete failed', error);
-        tools.log.debug("Unable to delete existing review app");
-      }
+      // try {
+      //   const resp = await heroku.request({
+      //     path: `/review-apps${id}`,
+      //     method: "DELETE"
+      //   });
+      // } catch (error) {
+      //   tools.log.debug('Delete failed', error);
+      //   tools.log.debug("Unable to delete existing review app");
+      // }
 
       // Otherwise we can complete it in this run
       let resp;
