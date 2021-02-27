@@ -12,7 +12,8 @@
     "@actions/core": "1.2.6",
     "@actions/github": "4.0.0",
     "actions-toolkit": "6.0.1",
-    "heroku-client": "3.1.0"
+    "heroku-client": "3.1.0",
+    "phin": "3.5.0"
   },
   "devDependencies": {
     "jest": "25.2.7",
