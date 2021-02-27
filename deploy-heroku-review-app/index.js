@@ -206,7 +206,7 @@ Toolkit.run(
         }
         tools.log.debug("Initiated review app creation");
         tools.log.debug('Response data', resp);
-        // reviewAppId = resp.app.id;
+        reviewAppId = resp.id;
       } catch (e) {
         tools.log.debug('Deploy failed',
           e);
@@ -227,6 +227,8 @@ Toolkit.run(
           path: `/review-apps/${reviewAppId}`,
           method: "GET"
         });
+
+        tools.log.debug('Response received', resp);
 
         // if not pending, done = true;
         if (resp.status === 'pending') {
