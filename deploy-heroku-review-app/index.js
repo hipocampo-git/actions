@@ -231,9 +231,9 @@ Toolkit.run(
         tools.log.debug('Response received', resp);
 
         // if not pending, done = true;
-        if (resp.status === 'pending') {
+        if (resp.status === 'pending' || resp.status == 'creating') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 2000);
+          await setTimeout(checkStatus, 10000);
         } else {
           tools.outputs.status = status;
           tools.log.success("Action complete");
