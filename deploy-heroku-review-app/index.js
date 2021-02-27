@@ -160,7 +160,8 @@ Toolkit.run(
           method: "DELETE"
         });
       } catch (error) {
-
+        tools.log.debug('Delete failed', error);
+        tools.log.debug("Unable to delete existing review app");
       }
 
       // Otherwise we can complete it in this run
@@ -203,7 +204,7 @@ Toolkit.run(
             }
           });
         }
-        tools.log.complete("Initiated review app creation");
+        tools.log.debug("Initiated review app creation");
         reviewAppId = resp.app.id;
       } catch (e) {
         tools.log.debug('Deploy failed',
