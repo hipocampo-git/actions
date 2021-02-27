@@ -6,22 +6,44 @@ const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
 // Run your GitHub Action!
 Toolkit.run(
   async (tools) => {
-    const pr = tools.context.payload.pull_request;
+    // tools.context.ref
+    // tools.context.sha
+    // tools.context.repo
 
     // Required information
     const event = tools.context.event;
-    const branch = pr.head.ref;
-    const version = pr.head.sha;
-    const fork = pr.head.repo.fork;
-    const pr_number = pr.number;
-    const repo_url = pr.head.repo.html_url;
-    const repo_name = pr.head.repo.name;
-    const owner = pr.head.repo.owner.login;
+
+    let pr;
+    let branch;
+    let version;
+    let fork;
+    let pr_number;
+    let repo_url;
+    let repo_name;
+    let owner;
+    if (event !== 'push') {
+       pr = tools.context.payload.pull_request;
+       branch = pr.head.ref;
+       version = pr.head.sha;
+       fork = pr.head.repo.fork;
+       pr_number = pr.number;
+       repo_url = pr.head.repo.html_url;
+       repo_name = pr.head.repo.name;
+       owner = pr.head.repo.owner.login;
+    } else {
+      branch = tools.context.ref;
+      version = tools.context.sha;
+      fork = tools.context.repo.fork;
+      pr_number = '';
+      repo_url = tools.context.repo.html_url;
+      repo_name = tools.context.repo.name;
+      owner = tools.context.repo.owner.login;
+    }
+
     // Note!! Make sure you use a personal access token and not the implicit
     //        secrets.GITHUB_TOKEN
     const github_pa_token = process.env.GITHUB_PA_TOKEN;
 
-    // This worked:
     const source_url = `https://${owner}:${github_pa_token}@api.github.com/repos/${owner}/${repo_name}/tarball/${branch}`;
 
     let fork_repo_id;
@@ -95,26 +117,27 @@ Toolkit.run(
 
     tools.log.info(`User is a collaborator: ${perms.data.permission}`);
 
-    let createReviewApp = false;
+    // let createReviewApp = false;
+    let createReviewApp = true;
 
-    if (["opened", "reopened", "synchronize"].indexOf(action) !== -1) {
-      tools.log.info("PR opened by collaborator");
-      createReviewApp = true;
-      await tools.github.issues.addLabels({
-        ...tools.context.repo,
-        labels: ["review-app"],
-        issue_number: pr_number,
-      });
-    } else if (action === "labeled") {
-      const labelName = tools.context.payload.label.name;
-      tools.log.info(`${labelName} label was added by collaborator`);
-
-      if (labelName === reviewAppLabelName) {
-        createReviewApp = true;
-      } else {
-        tools.log.debug(`Unexpected label, not creating app: ${labelName}`);
-      }
-    }
+    // if (["opened", "reopened", "synchronize"].indexOf(action) !== -1) {
+    //   tools.log.info("PR opened by collaborator");
+    //   createReviewApp = true;
+    //   await tools.github.issues.addLabels({
+    //     ...tools.context.repo,
+    //     labels: ["review-app"],
+    //     issue_number: pr_number,
+    //   });
+    // } else if (action === "labeled") {
+    //   const labelName = tools.context.payload.label.name;
+    //   tools.log.info(`${labelName} label was added by collaborator`);
+    //
+    //   if (labelName === reviewAppLabelName) {
+    //     createReviewApp = true;
+    //   } else {
+    //     tools.log.debug(`Unexpected label, not creating app: ${labelName}`);
+    //   }
+    // }
 
     if (createReviewApp) {
       // If it's a fork, creating the review app will fail as there are no secrets available
