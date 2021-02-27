@@ -237,6 +237,8 @@ Toolkit.run(
         }
       }
 
+      tools.log.debug('OFP - Exiting');
+
       // let done = false;
       // while (! done) {
       //   // Check review app status
