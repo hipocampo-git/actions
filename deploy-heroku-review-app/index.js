@@ -167,27 +167,45 @@ Toolkit.run(
       let resp;
       try {
         tools.log.pending("Creating review app");
-        resp = await heroku.request({
-          path: "/review-apps",
-          method: "POST",
-          body: {
-            branch,
-            pipeline: process.env.HEROKU_PIPELINE_ID,
-            source_blob: {
-              url: source_url,
-              version,
-            },
-            fork_repo_id,
-            pr_number,
-            environment: {
-              GIT_REPO_URL: repo_url,
+        if (event !== 'push') {
+          resp = await heroku.request({
+            path: "/review-apps",
+            method: "POST",
+            body: {
+              branch,
+              pipeline: process.env.HEROKU_PIPELINE_ID,
+              source_blob: {
+                url: source_url,
+                version,
+              },
+              fork_repo_id,
+              pr_number,
+              environment: {
+                GIT_REPO_URL: repo_url,
+              }
             }
-          }
-        });
+          });
+        } else {
+          resp = await heroku.request({
+            path: "/review-apps",
+            method: "POST",
+            body: {
+              branch,
+              pipeline: process.env.HEROKU_PIPELINE_ID,
+              source_blob: {
+                url: source_url,
+                version,
+              },
+              environment: {
+                GIT_REPO_URL: repo_url,
+              }
+            }
+          });
+        }
         tools.log.complete("Created review app");
       } catch (e) {
         tools.log.debug('Deploy failed',
-          resp);
+          e);
         // HIPOCAMPO UPDATE: We are now deleting the existing review apps
         //                   every time so we should never get here.
         // A 409 is a conflict, which means the app already exists
