@@ -21,6 +21,8 @@ Toolkit.run(
     let repo_url;
     let repo_name;
     let owner;
+    tools.log.debug("context info",
+      tools.context);
     if (event !== 'push') {
        pr = tools.context.payload.pull_request;
        branch = pr.head.ref;
