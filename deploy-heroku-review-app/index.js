@@ -205,7 +205,8 @@ Toolkit.run(
           });
         }
         tools.log.debug("Initiated review app creation");
-        reviewAppId = resp.app.id;
+        tools.log.debug('Response data', resp);
+        // reviewAppId = resp.app.id;
       } catch (e) {
         tools.log.debug('Deploy failed',
           e);
