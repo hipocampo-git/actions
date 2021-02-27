@@ -164,9 +164,10 @@ Toolkit.run(
       }
 
       // Otherwise we can complete it in this run
+      let resp;
       try {
         tools.log.pending("Creating review app");
-        const resp = await heroku.request({
+        resp = await heroku.request({
           path: "/review-apps",
           method: "POST",
           body: {
@@ -185,6 +186,8 @@ Toolkit.run(
         });
         tools.log.complete("Created review app");
       } catch (e) {
+        tools.log.debug('Deploy failed',
+          resp);
         // HIPOCAMPO UPDATE: We are now deleting the existing review apps
         //                   every time so we should never get here.
         // A 409 is a conflict, which means the app already exists
