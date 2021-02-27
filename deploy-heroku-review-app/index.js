@@ -231,12 +231,14 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending') {
           tools.log.debug("Waiting...");
-          setTimeout(checkStatus, 2000);
+          await setTimeout(checkStatus, 2000);
         } else {
           tools.outputs.status = status;
           tools.log.success("Action complete");
         }
       }
+
+      await checkStatus();
 
       tools.log.debug('OFP - Exiting');
 
