@@ -190,7 +190,7 @@ if (heroku.dockerBuildArgs) {
     const status = execSync("git status --porcelain").toString().trim();
     if (status) {
       execSync(
-        'git add -A && git commit -m "Commited changes from previous actions"'
+        'git add -A && git commit -m "Committed changes from previous actions"'
       );
     }
 

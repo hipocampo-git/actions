@@ -165,6 +165,7 @@ Toolkit.run(
 
       // Otherwise we can complete it in this run
       let resp;
+      let reviewAppId = null;
       try {
         tools.log.pending("Creating review app");
         if (event !== 'push') {
@@ -202,7 +203,8 @@ Toolkit.run(
             }
           });
         }
-        tools.log.complete("Created review app");
+        tools.log.complete("Initiated review app creation");
+        reviewAppId = resp.app.id;
       } catch (e) {
         tools.log.debug('Deploy failed',
           e);
@@ -215,11 +217,44 @@ Toolkit.run(
         status = 'existing';
         tools.log.complete("Review app is already created");
       }
+
+      let checkStatus = async() => {
+        tools.log.debug(
+            `Checking deployment status for review app ${reviewAppId}`);
+        resp = await heroku.request({
+          path: `/review-apps/${reviewAppId}`,
+          method: "GET"
+        });
+
+        // if not pending, done = true;
+        if (resp.status === 'pending') {
+          tools.log.debug("Waiting...");
+          setTimeout(checkStatus, 2000);
+        } else {
+          tools.outputs.status = status;
+          tools.log.success("Action complete");
+        }
+      }
+
+      // let done = false;
+      // while (! done) {
+      //   // Check review app status
+      //   tools.log.debug("Checking deployment status...");
+      //   resp = await heroku.request({
+      //     path: `/review-apps/${reviewAppId}`,
+      //     method: "GET"
+      //   });
+      //
+      //   // if not pending, done = true;
+      //   if (resp.status !== 'pending') {
+      //     done = true;
+      //   }
+      // }
     }
 
     // print(f"::set-output name=review_app_name::{review_app_name}")
-    tools.outputs.status = status;
-    tools.log.success("Action complete");
+    // tools.outputs.status = status;
+    // tools.log.success("Action complete");
   },
   {
     event: [
