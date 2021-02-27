@@ -23,6 +23,8 @@ Toolkit.run(
     let owner;
     tools.log.debug("context info",
       tools.context);
+    tools.log.debug("payload info",
+        tools.context.payload);
     if (event !== 'push') {
        pr = tools.context.payload.pull_request;
        branch = pr.head.ref;
@@ -37,9 +39,9 @@ Toolkit.run(
       version = tools.context.sha;
       fork = tools.context.repo.fork;
       pr_number = '';
-      repo_url = tools.context.repo.html_url;
-      repo_name = tools.context.repo.name;
-      owner = tools.context.repo.owner.login;
+      repo_url = tools.context.payload.repository.html_url;
+      repo_name = tools.context.payload.repository.name;
+      owner = tools.context.payload.repository.owner.login;
     }
 
     // Note!! Make sure you use a personal access token and not the implicit
