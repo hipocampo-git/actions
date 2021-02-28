@@ -238,11 +238,11 @@ Toolkit.run(
         } else if (resp.status === 'created') {
           tools.outputs.status = status;
           tools.log.debug('outputs', tools.outputs);
-          resp = await heroku.request({
-            path: `/apps/${reviewAppId}`,
-            method: "GET"
-          });
-          tools.log.debug('App info', resp);
+          // resp = await heroku.request({
+          //   path: `/apps/${reviewAppId}`,
+          //   method: "GET"
+          // });
+          // tools.log.debug('App info', resp);
           // tools.outputs.review-app-name = resp.name;
 
           tools.log.success("Action complete");
