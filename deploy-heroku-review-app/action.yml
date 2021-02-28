@@ -6,3 +6,6 @@ runs:
 branding:
   icon: book-open
   color: orange
+outputs:
+  review-app-name:
+    description: "The name of the deployed review app"

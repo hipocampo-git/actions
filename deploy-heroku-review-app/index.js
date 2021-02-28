@@ -1,4 +1,5 @@
 const { Toolkit } = require("actions-toolkit");
+// const core = require("@actions/core");
 
 const Heroku = require("heroku-client");
 const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
@@ -233,10 +234,20 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending' || resp.status == 'creating') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 10000);
-        } else {
+          await setTimeout(checkStatus, 30000);
+        } else if (resp.status === 'created') {
           tools.outputs.status = status;
+          tools.log.debug('outputs', tools.outputs);
+          resp = await heroku.request({
+            path: `/apps/${reviewAppId}`,
+            method: "GET"
+          });
+          tools.log.debug('App info', resp);
+          // tools.outputs.review-app-name = resp.name;
+
           tools.log.success("Action complete");
+        } else {
+          tools.log.debug(`Unexpected status of ${resp.status}`);
         }
       }
 
