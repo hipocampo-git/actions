@@ -90,7 +90,7 @@ Toolkit.run(
       tools.log.info(`Did not find review app for PR number ${pr_number}`);
       // return;
     } else {
-      tools.log.pending("Deleting existing review app");
+      tools.log.pending(`Deleting existing review app id ${app.id}`);
       await heroku.delete(`/review-apps/${app.id}`);
       tools.log.complete("Review app deleted");
     }
