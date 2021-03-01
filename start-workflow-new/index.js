@@ -9,6 +9,10 @@ async function run() {
     console.log(JSON.stringify(github.context, null, "\t"));
     core.endGroup();
 
+    core.startGroup("Logging payload object");
+    console.log(JSON.stringify(github.context.payload, null, "\t"));
+    core.endGroup();
+
     const token = core.getInput("token");
     const commitMessage = core.getInput("commit-message");
     // const eventName = core.getInput("event-name");
@@ -26,7 +30,7 @@ async function run() {
     let branchNameOutput = '';
     const herokuAppPrefix = 'hipocampo-pr-';
 
-    const event = tools.context.event;
+    // const event = tools.context.event;
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
@@ -40,10 +44,10 @@ async function run() {
       // HEROKU APP ==> hipocampo-pr- + PR #
       // if activity == "opened" ==> write into workflows table
       case 'pull_request':
-        let pr = tools.context.payload.pull_request;
-        branchNameOutput =  pr.head.ref;
-        herokuAppOutput = herokuAppPrefix + pr.number;
-        prIdOutput = pr.number;
+        // let pr = tools.context.payload.pull_request;
+        branchNameOutput =  github.context.payload.pull_request.head.ref;
+        prIdOutput = github.context.payload.number;
+        herokuAppOutput = herokuAppPrefix + prIdOutput;
 
         let insertId = null;
         let status = 'new';
