@@ -63,13 +63,13 @@ async function run() {
 
         core.debug('here AA');
 
-       //  const connection = await mysqlPromise.createConnection({
-       //    host: dbHost,
-       //    user: dbUser,
-       //    password: dbPassword,
-       //    database: dbName,
-       //    connectTimeout: 60000
-       //  });
+        const connection = await mysqlPromise.createConnection({
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbName,
+          connectTimeout: 30000
+        });
        //
        //
        //
