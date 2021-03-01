@@ -3,8 +3,10 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
 
+
 // async function run() {
 const foo = core.group('Do something async', async () => {
+  let connection = null;
   try {
     core.startGroup("Logging context object");
     console.log(JSON.stringify(github.context, null, "\t"));
@@ -89,7 +91,7 @@ const foo = core.group('Do something async', async () => {
 
         core.debug(readResponse);
 
-        connection.end();
+        // connection.end();
 
         // const readResponse = await core.group('Do something else async', async () => {
         //   const [readResponse] = await connection.execute(readQuery);
@@ -98,27 +100,26 @@ const foo = core.group('Do something async', async () => {
         // });
         //
 
+        if (readResponse.length === 0) {
+          console.log('Branch name not found, creating new ci entry.');
+          const query =
+              `INSERT INTO workflows
+               (branch, pull_request_id)
+               VALUES ("${branchNameOutput}", ${prIdOutput})`;
 
-        // if (readResponse.length === 0) {
-        //   console.log('Branch name not found, creating new ci entry.');
-        //   const query =
-        //       `INSERT INTO workflows
-        //        (branch, pull_request_id)
-        //        VALUES ("${branchNameOutput}", ${prIdOutput})`;
-        //
-        //   const [response] = await connection.execute(query);
-        //
-        //   insertId = response.insertId;
-        // } else {
-        //   insertId = readResponse[0].id;
-        //   herokuAppName = readResponse[0].heroku_app;
-        //   // It's possible that we created the db record but failed prior to
-        //   // deploying heroku.
-        //   if (herokuAppName) {
-        //     status = 'existing';
-        //   }
-        //   console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
-        // }
+          const [response] = await connection.execute(query);
+
+          insertId = response.insertId;
+        } else {
+          insertId = readResponse[0].id;
+          herokuAppName = readResponse[0].heroku_app;
+          // It's possible that we created the db record but failed prior to
+          // deploying heroku.
+          if (herokuAppName) {
+            status = 'existing';
+          }
+          console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
+        }
         break;
       // if push event, do y
       // PR # ==> extracted from commit message
@@ -160,6 +161,10 @@ const foo = core.group('Do something async', async () => {
   } catch (error) {
     core.setFailed(error.message);
     core.setOutput("pull-request-id", "something");
+  } finally {
+    if (connection) {
+      connection.end();
+    }
   }
 });
 
