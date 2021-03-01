@@ -63,17 +63,22 @@ async function run() {
 
         core.debug('here AA');
 
-        const connection = await mysqlPromise.createConnection({
-          host: dbHost,
-          user: dbUser,
-          password: dbPassword,
-          database: dbName,
-          connectTimeout: 30000
-        });
-       //
-       //
-       //
-       //  const [readResponse] = await connection.execute(readQuery);
+        const connection = await core.group('Do something async', async () => {
+          const connection = await mysqlPromise.createConnection({
+            host: dbHost,
+            user: dbUser,
+            password: dbPassword,
+            database: dbName,
+            connectTimeout: 30000
+          });
+          return connection;
+        })
+
+        // const [readResponse] = await connection.execute(readQuery);
+
+        core.setFailed(error.message);
+
+
        //
        //  if (readResponse.length === 0) {
        //    console.log('Branch name not found, creating new ci entry.');
