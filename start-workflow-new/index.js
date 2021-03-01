@@ -159,4 +159,6 @@ const foo = core.group('Do something async', async () => {
   }
 });
 
-foo.resolve(1);
+return;
+
+// foo.resolve(1);
