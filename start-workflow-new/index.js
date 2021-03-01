@@ -74,6 +74,13 @@ async function run() {
         //   return connection;
         //   core.debug(someVar1);
         // });
+        const connection = await mysqlPromise.createConnection({
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbName,
+          connectTimeout: 30000
+        });
         //
         // const readResponse = await core.group('Do something else async', async () => {
         //   const [readResponse] = await connection.execute(readQuery);
