@@ -111,14 +111,20 @@ Toolkit.run(
           tools.log.fatal('Heroku deletion failed');
           tools.log.debug(JSON.stringify(resp));
           return;
+        } else if (resp.status === 'deleted') {
+          tools.log.debug(`Successfully deleted app ${app.id}`);
         } else {
-          tools.log.debug(`Delete response status: ${resp.status}`);
+          tools.log.fatal(`Unexpected delete response status: ${resp.status}`);
+          tools.log.debug(JSON.stringify(resp));
+          return
         }
       }
 
       await checkStatus();
-      tools.log.complete("Review app deleted");
+      tools.log.debug("Review app deleted");
     }
+
+    tools.log.debug('HERE 111111');
 
     //   return;
     // }
