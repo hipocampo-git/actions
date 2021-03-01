@@ -52,7 +52,7 @@ async function run() {
         let insertId = null;
         let status = 'new';
         let herokuAppName = null;
-        let readQuery = `SELECT * FROM workflows WHERE branch="${args.branch}"`;
+        let readQuery = `SELECT * FROM workflows WHERE branch="${branchNameOutput}"`;
 
         const connection = await mysqlPromise.createConnection({
           host: dbHost,
@@ -69,7 +69,7 @@ async function run() {
           const query =
               `INSERT INTO workflows
        (branch, pull_request_id)
-       VALUES ("${args.branch}", ${args.pullRequestId})`;
+       VALUES ("${branchNameOutput}", ${prIdOutput})`;
 
           const [response] = await connection.execute(query);
 
@@ -82,7 +82,7 @@ async function run() {
           if (herokuAppName) {
             status = 'existing';
           }
-          console.log(`ci id ${insertId} found for branch ${args.branch}`);
+          console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
         }
         break;
       // if push event, do y
