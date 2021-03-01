@@ -89,7 +89,7 @@ const foo = core.group('Do something async', async () => {
 
         const [readResponse] = await connection.execute(readQuery);
 
-        connection.end();
+        // connection.end();
 
         core.debug(readResponse);
 
@@ -158,7 +158,7 @@ const foo = core.group('Do something async', async () => {
     core.setOutput("pull-request-id", JSON.stringify(prIdOutput));
     core.setOutput("heroku-app-name", JSON.stringify(herokuAppOutput));
     core.setOutput("branch-name", JSON.stringify(branchNameOutput));
-    connection.end();
+    // connection.end();
   } catch (error) {
     core.setFailed(error.message);
     core.setOutput("pull-request-id", "something");
