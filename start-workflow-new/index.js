@@ -91,30 +91,26 @@ core.group('Do something async', async () => {
 
         core.debug(readResponse);
 
-        // core.debug(someVar3);
+        if (readResponse.length === 0) {
+          console.log('Branch name not found, creating new ci entry.');
+          const query =
+              `INSERT INTO workflows
+               (branch, pull_request_id)
+               VALUES ("${branchNameOutput}", ${prIdOutput})`;
 
+          const [response] = await connection.execute(query);
 
-       //
-       //  if (readResponse.length === 0) {
-       //    console.log('Branch name not found, creating new ci entry.');
-       //    const query =
-       //        `INSERT INTO workflows
-       // (branch, pull_request_id)
-       // VALUES ("${branchNameOutput}", ${prIdOutput})`;
-       //
-       //    const [response] = await connection.execute(query);
-       //
-       //    insertId = response.insertId;
-       //  } else {
-       //    insertId = readResponse[0].id;
-       //    herokuAppName = readResponse[0].heroku_app;
-       //    // It's possible that we created the db record but failed prior to
-       //    // deploying heroku.
-       //    if (herokuAppName) {
-       //      status = 'existing';
-       //    }
-       //    console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
-       //  }
+          insertId = response.insertId;
+        } else {
+          insertId = readResponse[0].id;
+          herokuAppName = readResponse[0].heroku_app;
+          // It's possible that we created the db record but failed prior to
+          // deploying heroku.
+          if (herokuAppName) {
+            status = 'existing';
+          }
+          console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
+        }
         break;
       // if push event, do y
       // PR # ==> extracted from commit message
@@ -156,13 +152,3 @@ core.group('Do something async', async () => {
     core.setOutput("pull-request-id", "something");
   }
 });
-
-//
-//
-//
-// try {
-//   run();
-//   core.setOutput("pull-request-id", "something");
-// } catch (error) {
-//   core.setFailed(error.message);
-// }
