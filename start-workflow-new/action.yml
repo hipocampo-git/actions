@@ -26,9 +26,6 @@ outputs:
     description: "id from the workflows db table"
   deploy-status:
     description: "status of the deployment"
-#runs:
-#  using: "node12"
-#  main: "dist/index.js"
 runs:
-  using: docker
-  image: Dockerfile
+  using: "node12"
+  main: "dist/index.js"
