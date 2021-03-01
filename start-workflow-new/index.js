@@ -39,7 +39,7 @@ async function run() {
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
-    const dbHost = 'devops';
+    const dbHost = '127.0.0.1';
     const dbName = 'main';
 
     core.debug(`EVENT NAME: ${eventName}`);
