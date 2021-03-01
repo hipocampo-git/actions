@@ -22,10 +22,10 @@ Toolkit.run(
     let repo_url;
     let repo_name;
     let owner;
-    tools.log.debug("context info",
-      tools.context);
-    tools.log.debug("payload info",
-        tools.context.payload);
+    // tools.log.debug("context info",
+    //   tools.context);
+    // tools.log.debug("payload info",
+    //     tools.context.payload);
     if (event !== 'push') {
        pr = tools.context.payload.pull_request;
        branch = pr.head.ref;
@@ -95,16 +95,16 @@ Toolkit.run(
 
       let checkStatus = async() => {
         tools.log.debug(
-            `Checking deployment status for review app ${reviewAppId}`);
-        resp = await heroku.request({
-          path: `/review-apps/${reviewAppId}`,
+            `Checking deployment status for review app ${app.id}`);
+        let resp = await heroku.request({
+          path: `/review-apps/${app.id}`,
           method: "GET"
         });
 
         tools.log.debug('Response received', resp);
 
         // if not pending, done = true;
-        if (resp.status === 'pending' || resp.status == 'creating') {
+        if (resp.status === 'pending') {
           tools.log.debug("Waiting...");
           await setTimeout(checkStatus, 30000);
         } else {
