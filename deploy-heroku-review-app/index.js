@@ -93,7 +93,7 @@ Toolkit.run(
       tools.log.pending(`Deleting existing review app id ${app.id}`);
       await heroku.delete(`/review-apps/${app.id}`);
 
-      let checkStatus = async() => {
+      let checkDeleteStatus = async() => {
         tools.log.debug(
             `Checking deletion status for review app ${app.id}`);
         let resp = await heroku.request({
@@ -106,7 +106,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'deleting') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 20000);
+          await setTimeout(checkDeleteStatus, 20000);
         } else if (resp.status === 'errored') {
           tools.log.fatal('Heroku deletion failed');
           tools.log.debug(JSON.stringify(resp));
@@ -120,7 +120,7 @@ Toolkit.run(
         }
       }
 
-      await checkStatus();
+      await checkDeleteStatus();
       tools.log.debug("Review app deleted");
     }
 
@@ -252,7 +252,7 @@ Toolkit.run(
         tools.log.complete("Review app is already created");
       }
 
-      let checkStatus = async() => {
+      let checkDeployStatus = async() => {
         tools.log.debug(
             `Checking deployment status for review app ${reviewAppId}`);
         resp = await heroku.request({
@@ -265,7 +265,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending' || resp.status == 'creating') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 60000);
+          await setTimeout(checkDeployStatus, 60000);
         } else if (resp.status === 'created') {
           tools.outputs.status = status;
           tools.log.debug('outputs', tools.outputs);
@@ -287,7 +287,7 @@ Toolkit.run(
         }
       }
 
-      await checkStatus();
+      await checkDeployStatus();
 
       tools.log.debug('OFP - Exiting');
 
