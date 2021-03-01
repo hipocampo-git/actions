@@ -4,6 +4,19 @@ const { Toolkit } = require("actions-toolkit");
 const Heroku = require("heroku-client");
 const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
 
+/**
+ * Sleep prior to calling a function.
+ * @param {Function} fn function to call after sleeping
+ * @param {integer} timeout sleep duration in ms
+ * @return {Promise<unknown>}
+ */
+const sleep = (fn, timeout) => {
+  return new Promise((resolve) => {
+    // wait 3s before calling fn(par)
+    setTimeout(() => resolve(fn()), timeout)
+  })
+};
+
 // Run your GitHub Action!
 Toolkit.run(
   async (tools) => {
@@ -106,7 +119,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'deleting') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkDeleteStatus, 20000);
+          await sleep(checkDeleteStatus, 20000);
         } else if (resp.status === 'errored') {
           tools.log.fatal('Heroku deletion failed');
           tools.log.debug(JSON.stringify(resp));
@@ -265,7 +278,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending' || resp.status == 'creating') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkDeployStatus, 60000);
+          await sleep(checkDeployStatus, 60000);
         } else if (resp.status === 'created') {
           tools.outputs.status = status;
           tools.log.debug('outputs', tools.outputs);
