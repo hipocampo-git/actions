@@ -42,6 +42,8 @@ async function run() {
     const dbHost = process.env.DBHOST;
     const dbName = process.env.DATABASE;
 
+    core.debug(`EVENT NAME: ${eventName}`);
+
     switch (eventName) {
       // if pull request event, do x
       // BRANCH NAME ==> ${GITHUB_HEAD_REF}
@@ -59,36 +61,40 @@ async function run() {
         let herokuAppName = null;
         let readQuery = `SELECT * FROM workflows WHERE branch="${branchNameOutput}"`;
 
-        const connection = await mysqlPromise.createConnection({
-          host: dbHost,
-          user: dbUser,
-          password: dbPassword,
-          database: dbName,
-          connectTimeout: 60000
-        });
+        core.debug('here AA');
 
-        const [readResponse] = await connection.execute(readQuery);
-
-        if (readResponse.length === 0) {
-          console.log('Branch name not found, creating new ci entry.');
-          const query =
-              `INSERT INTO workflows
-       (branch, pull_request_id)
-       VALUES ("${branchNameOutput}", ${prIdOutput})`;
-
-          const [response] = await connection.execute(query);
-
-          insertId = response.insertId;
-        } else {
-          insertId = readResponse[0].id;
-          herokuAppName = readResponse[0].heroku_app;
-          // It's possible that we created the db record but failed prior to
-          // deploying heroku.
-          if (herokuAppName) {
-            status = 'existing';
-          }
-          console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
-        }
+       //  const connection = await mysqlPromise.createConnection({
+       //    host: dbHost,
+       //    user: dbUser,
+       //    password: dbPassword,
+       //    database: dbName,
+       //    connectTimeout: 60000
+       //  });
+       //
+       //
+       //
+       //  const [readResponse] = await connection.execute(readQuery);
+       //
+       //  if (readResponse.length === 0) {
+       //    console.log('Branch name not found, creating new ci entry.');
+       //    const query =
+       //        `INSERT INTO workflows
+       // (branch, pull_request_id)
+       // VALUES ("${branchNameOutput}", ${prIdOutput})`;
+       //
+       //    const [response] = await connection.execute(query);
+       //
+       //    insertId = response.insertId;
+       //  } else {
+       //    insertId = readResponse[0].id;
+       //    herokuAppName = readResponse[0].heroku_app;
+       //    // It's possible that we created the db record but failed prior to
+       //    // deploying heroku.
+       //    if (herokuAppName) {
+       //      status = 'existing';
+       //    }
+       //    console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
+       //  }
         break;
       // if push event, do y
       // PR # ==> extracted from commit message
