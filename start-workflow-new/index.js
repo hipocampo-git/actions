@@ -82,14 +82,14 @@ core.group('Do something async', async () => {
           database: dbName,
           connectTimeout: 30000
         });
-        //
-        // const readResponse = await core.group('Do something else async', async () => {
-        //   const [readResponse] = await connection.execute(readQuery);
-        //   return readResponse
-        //   core.debug(someVar2);
-        // });
 
-        // core.debug(readResponse);
+        const readResponse = await core.group('Do something else async', async () => {
+          const [readResponse] = await connection.execute(readQuery);
+          return readResponse
+          core.debug(someVar2);
+        });
+
+        core.debug(readResponse);
 
         // core.debug(someVar3);
 
