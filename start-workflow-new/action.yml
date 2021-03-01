@@ -1,0 +1,31 @@
+name: "Parse Commit Message"
+author: "Oliver Pike"
+description: "Parses commit messages to extract data like the pull request id"
+inputs:
+  commit-message:
+    description: "commit message to parse"
+    required: true
+  event-name:
+    description: "event name ('push', 'pull request', etc.)"
+    required: true
+  action-name:
+    description: "action name ('closed', 'opened', 'reopened', etc.)"
+    required: false
+  pull-request-id:
+    description: "pull request #"
+    required: false
+  token:
+    description: "Github Token"
+    required: true
+outputs:
+  branch-name:
+    description: "pull request id extracted from the commit message"
+  heroku-app-name:
+    description: "name of the heroku app"
+  ci-id:
+    description: "id from the workflows db table"
+  deploy-status:
+    description: "status of the deployment"
+runs:
+  using: "node12"
+  main: "dist/index.js"
