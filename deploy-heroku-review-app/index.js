@@ -104,9 +104,13 @@ Toolkit.run(
         tools.log.debug('Response received', resp);
 
         // if not pending, done = true;
-        if (resp.status === 'pending') {
+        if (resp.status === 'deleting') {
           tools.log.debug("Waiting...");
           await setTimeout(checkStatus, 20000);
+        } else if (resp.status === 'errored') {
+          tools.log.fatal('Heroku deletion failed');
+          tools.log.debug(JSON.stringify(resp));
+          return;
         } else {
           tools.log.debug(`Delete response status: ${resp.status}`);
         }
@@ -268,8 +272,9 @@ Toolkit.run(
 
           tools.log.success("Action complete");
         } else if (resp.status === 'errored') {
-          tools.log.debug('Heroku deployment failed');
+          tools.log.fatal('Heroku deployment failed');
           tools.log.debug(JSON.stringify(resp));
+          return;
         } else {
           tools.log.debug(`Unexpected status of ${resp.status}`);
           tools.log.debug(JSON.stringify(resp));
