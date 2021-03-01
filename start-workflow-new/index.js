@@ -127,10 +127,10 @@ const foo = core.group('Do something async', async () => {
     // });
 
     // TODO: Not sure if we need to output this still.
-    core.setOutput("pull-request-id", JSON.stringify(prIdOutput));
-    core.setOutput("heroku-app-name", JSON.stringify(herokuAppOutput));
-    core.setOutput("branch-name", JSON.stringify(branchNameOutput));
-    core.setOutput("ci-id", JSON.stringify(ciIdOutput));
+    core.setOutput("pull-request-id", prIdOutput);
+    core.setOutput("heroku-app-name", herokuAppOutput);
+    core.setOutput("branch-name", branchNameOutput);
+    core.setOutput("ci-id", ciIdOutput);
     // connection.end();
   } catch (error) {
     core.setFailed(error.message);
