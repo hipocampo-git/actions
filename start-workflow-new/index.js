@@ -156,11 +156,13 @@ const foo = core.group('Do something async', async () => {
     core.setOutput("pull-request-id", JSON.stringify(prIdOutput));
     core.setOutput("heroku-app-name", JSON.stringify(herokuAppOutput));
     core.setOutput("branch-name", JSON.stringify(branchNameOutput));
+    connection.end();
   } catch (error) {
     core.setFailed(error.message);
     core.setOutput("pull-request-id", "something");
   } finally {
     if (connection) {
+      // The github action won't terminate without this.
       connection.end();
     }
   }
