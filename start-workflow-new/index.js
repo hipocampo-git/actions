@@ -85,17 +85,19 @@ const foo = core.group('Do something async', async () => {
 
         // connection.resolve(1);
 
-
-
-        const readResponse = await core.group('Do something else async', async () => {
-          const [readResponse] = await connection.execute(readQuery);
-          return readResponse
-          core.debug(someVar2);
-        });
+        const [readResponse] = await connection.execute(readQuery);
 
         core.debug(readResponse);
 
-        // connection.end();
+        connection.end();
+
+        // const readResponse = await core.group('Do something else async', async () => {
+        //   const [readResponse] = await connection.execute(readQuery);
+        //   return readResponse
+        //   core.debug(someVar2);
+        // });
+        //
+
 
         // if (readResponse.length === 0) {
         //   console.log('Branch name not found, creating new ci entry.');
