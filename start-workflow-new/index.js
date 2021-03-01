@@ -13,6 +13,11 @@ async function run() {
     console.log(JSON.stringify(github.context.payload, null, "\t"));
     core.endGroup();
 
+
+    core.startGroup("env variables");
+    console.log(JSON.stringify(process.env, null, "\t"));
+    core.endGroup();
+
     const token = core.getInput("token");
     const commitMessage = core.getInput("commit-message");
     // const eventName = core.getInput("event-name");
