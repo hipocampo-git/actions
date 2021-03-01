@@ -83,6 +83,10 @@ core.group('Do something async', async () => {
           connectTimeout: 30000
         });
 
+        connection.resolve(1);
+
+        connection.end();
+
         // const readResponse = await core.group('Do something else async', async () => {
         //   const [readResponse] = await connection.execute(readQuery);
         //   return readResponse
@@ -147,6 +151,8 @@ core.group('Do something async', async () => {
     core.setOutput("pull-request-id", JSON.stringify(prIdOutput));
     core.setOutput("heroku-app-name", JSON.stringify(herokuAppOutput));
     core.setOutput("branch-name", JSON.stringify(branchNameOutput));
+
+    return;
   } catch (error) {
     core.setFailed(error.message);
     core.setOutput("pull-request-id", "something");
