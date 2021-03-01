@@ -81,6 +81,8 @@ async function run() {
 
         core.debug(readResponse);
 
+        core.debug(someVar);
+
 
        //
        //  if (readResponse.length === 0) {
@@ -141,6 +143,7 @@ async function run() {
     core.setOutput("branch-name", JSON.stringify(branchNameOutput));
   } catch (error) {
     core.setFailed(error.message);
+    core.setOutput("pull-request-id", "something");
   }
 }
 
