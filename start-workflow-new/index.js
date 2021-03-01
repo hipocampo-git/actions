@@ -89,6 +89,8 @@ const foo = core.group('Do something async', async () => {
 
         const [readResponse] = await connection.execute(readQuery);
 
+        connection.end();
+
         core.debug(readResponse);
 
 
