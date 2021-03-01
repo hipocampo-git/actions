@@ -106,7 +106,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 30000);
+          await setTimeout(checkStatus, 20000);
         } else {
           tools.log.debug(`Delete response status: ${resp.status}`);
         }
@@ -255,7 +255,7 @@ Toolkit.run(
         // if not pending, done = true;
         if (resp.status === 'pending' || resp.status == 'creating') {
           tools.log.debug("Waiting...");
-          await setTimeout(checkStatus, 30000);
+          await setTimeout(checkStatus, 60000);
         } else if (resp.status === 'created') {
           tools.outputs.status = status;
           tools.log.debug('outputs', tools.outputs);
