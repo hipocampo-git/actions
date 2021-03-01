@@ -81,7 +81,7 @@ async function run() {
         //   core.debug(someVar2);
         // });
 
-        core.debug(readResponse);
+        // core.debug(readResponse);
 
         // core.debug(someVar3);
 
