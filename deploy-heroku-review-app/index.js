@@ -129,8 +129,8 @@ Toolkit.run(
       requiredCollaboratorPermission = ["triage", "write", "maintain", "admin"];
     }
 
-    const reviewAppLabelName =
-      process.env.REVIEW_APP_LABEL_NAME || "review-app";
+    // const reviewAppLabelName =
+    //   process.env.REVIEW_APP_LABEL_NAME || "review-app";
 
     const perms = await tools.github.repos.getCollaboratorPermissionLevel({
       ...tools.context.repo,
@@ -305,12 +305,10 @@ Toolkit.run(
       "pull_request.opened",
       "pull_request.reopened",
       "pull_request.synchronize",
-      "pull_request.labeled",
       "pull_request.closed",
       "pull_request_target.opened",
       "pull_request_target.reopened",
       "pull_request_target.synchronize",
-      "pull_request_target.labeled",
       "pull_request_target.closed",
       "push"
     ],
