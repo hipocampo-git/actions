@@ -77,7 +77,7 @@ const foo = core.group('Do something async', async () => {
         //   return connection;
         //   core.debug(someVar1);
         // });
-        const connection = await mysqlPromise.createConnection({
+        connection = await mysqlPromise.createConnection({
           host: dbHost,
           user: dbUser,
           password: dbPassword,
