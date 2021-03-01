@@ -1,4 +1,4 @@
-name: "Parse Commit Message"
+name: "Start Workflow (new)"
 author: "Oliver Pike"
 description: "Parses commit messages to extract data like the pull request id"
 inputs:
@@ -26,6 +26,9 @@ outputs:
     description: "id from the workflows db table"
   deploy-status:
     description: "status of the deployment"
+#runs:
+#  using: "node12"
+#  main: "dist/index.js"
 runs:
-  using: "node12"
-  main: "dist/index.js"
+  using: docker
+  image: Dockerfile
