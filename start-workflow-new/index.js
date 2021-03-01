@@ -83,13 +83,13 @@ core.group('Do something async', async () => {
           connectTimeout: 30000
         });
 
-        const readResponse = await core.group('Do something else async', async () => {
-          const [readResponse] = await connection.execute(readQuery);
-          return readResponse
-          core.debug(someVar2);
-        });
-
-        core.debug(readResponse);
+        // const readResponse = await core.group('Do something else async', async () => {
+        //   const [readResponse] = await connection.execute(readQuery);
+        //   return readResponse
+        //   core.debug(someVar2);
+        // });
+        //
+        // core.debug(readResponse);
 
         // if (readResponse.length === 0) {
         //   console.log('Branch name not found, creating new ci entry.');
