@@ -246,8 +246,12 @@ Toolkit.run(
           // tools.outputs.review-app-name = resp.name;
 
           tools.log.success("Action complete");
+        } else if (resp.status === 'errored') {
+          tools.log.debug('Heroku deployment failed');
+          tools.log.debug(JSON.stringify(resp));
         } else {
           tools.log.debug(`Unexpected status of ${resp.status}`);
+          tools.log.debug(JSON.stringify(resp));
         }
       }
 

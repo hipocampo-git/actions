@@ -19,6 +19,8 @@ inputs:
     required: true
 outputs:
   branch-name:
+    description: "pull request branch name"
+  pull-request-id:
     description: "pull request id extracted from the commit message"
   heroku-app-name:
     description: "name of the heroku app"
