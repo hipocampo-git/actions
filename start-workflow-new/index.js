@@ -63,27 +63,27 @@ async function run() {
 
         core.debug('here AA');
 
-        const connection = await core.group('Do something async', async () => {
-          const connection = await mysqlPromise.createConnection({
-            host: dbHost,
-            user: dbUser,
-            password: dbPassword,
-            database: dbName,
-            connectTimeout: 30000
-          });
-          return connection;
-          core.debug(someVar1);
-        });
-
-        const readResponse = await core.group('Do something else async', async () => {
-          const [readResponse] = await connection.execute(readQuery);
-          return readResponse
-          core.debug(someVar2);
-        });
+        // const connection = await core.group('Do something async', async () => {
+        //   const connection = await mysqlPromise.createConnection({
+        //     host: dbHost,
+        //     user: dbUser,
+        //     password: dbPassword,
+        //     database: dbName,
+        //     connectTimeout: 30000
+        //   });
+        //   return connection;
+        //   core.debug(someVar1);
+        // });
+        //
+        // const readResponse = await core.group('Do something else async', async () => {
+        //   const [readResponse] = await connection.execute(readQuery);
+        //   return readResponse
+        //   core.debug(someVar2);
+        // });
 
         core.debug(readResponse);
 
-        core.debug(someVar3);
+        // core.debug(someVar3);
 
 
        //
