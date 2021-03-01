@@ -3,7 +3,6 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
 
-
 // async function run() {
 const foo = core.group('Do something async', async () => {
   let connection = null;
@@ -36,9 +35,8 @@ const foo = core.group('Do something async', async () => {
     let prIdOutput = '';
     let herokuAppOutput = '';
     let branchNameOutput = '';
+    let ciIdOutput = '';
     const herokuAppPrefix = 'hipocampo-pr-';
-
-    // const event = tools.context.event;
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
@@ -59,24 +57,11 @@ const foo = core.group('Do something async', async () => {
         prIdOutput = github.context.payload.number;
         herokuAppOutput = herokuAppPrefix + prIdOutput;
 
-        let insertId = null;
+        // let insertId = null;
         let status = 'new';
         let herokuAppName = null;
         let readQuery = `SELECT * FROM workflows WHERE branch="${branchNameOutput}"`;
 
-        core.debug('here AA');
-
-        // const connection = await core.group('Do something async', async () => {
-        //   const connection = await mysqlPromise.createConnection({
-        //     host: dbHost,
-        //     user: dbUser,
-        //     password: dbPassword,
-        //     database: dbName,
-        //     connectTimeout: 30000
-        //   });
-        //   return connection;
-        //   core.debug(someVar1);
-        // });
         connection = await mysqlPromise.createConnection({
           host: dbHost,
           user: dbUser,
@@ -85,22 +70,9 @@ const foo = core.group('Do something async', async () => {
           connectTimeout: 30000
         });
 
-        // connection.resolve(1);
-
         const [readResponse] = await connection.execute(readQuery);
 
-        // connection.end();
-
         core.debug(readResponse);
-
-
-
-        // const readResponse = await core.group('Do something else async', async () => {
-        //   const [readResponse] = await connection.execute(readQuery);
-        //   return readResponse
-        //   core.debug(someVar2);
-        // });
-        //
 
         if (readResponse.length === 0) {
           console.log('Branch name not found, creating new ci entry.');
@@ -111,16 +83,16 @@ const foo = core.group('Do something async', async () => {
 
           const [response] = await connection.execute(query);
 
-          insertId = response.insertId;
+          ciIdOutput = response.insertId;
         } else {
-          insertId = readResponse[0].id;
+          ciIdOutput = readResponse[0].id;
           herokuAppName = readResponse[0].heroku_app;
           // It's possible that we created the db record but failed prior to
           // deploying heroku.
           if (herokuAppName) {
             status = 'existing';
           }
-          console.log(`ci id ${insertId} found for branch ${branchNameOutput}`);
+          console.log(`ci id ${ciIdOutput} found for branch ${branchNameOutput}`);
         }
         break;
       // if push event, do y
@@ -158,6 +130,7 @@ const foo = core.group('Do something async', async () => {
     core.setOutput("pull-request-id", JSON.stringify(prIdOutput));
     core.setOutput("heroku-app-name", JSON.stringify(herokuAppOutput));
     core.setOutput("branch-name", JSON.stringify(branchNameOutput));
+    core.setOutput("ci-id", JSON.stringify(ciIdOutput));
     // connection.end();
   } catch (error) {
     core.setFailed(error.message);

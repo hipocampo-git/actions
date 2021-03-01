@@ -17,15 +17,15 @@ inputs:
   token:
     description: "Github Token"
     required: true
-#outputs:
-#  branch-name:
-#    description: "pull request id extracted from the commit message"
-#  heroku-app-name:
-#    description: "name of the heroku app"
-#  ci-id:
-#    description: "id from the workflows db table"
-#  deploy-status:
-#    description: "status of the deployment"
+outputs:
+  branch-name:
+    description: "pull request id extracted from the commit message"
+  heroku-app-name:
+    description: "name of the heroku app"
+  ci-id:
+    description: "id from the workflows db table"
+  deploy-status:
+    description: "status of the deployment"
 runs:
   using: "node12"
   main: "index.js"
