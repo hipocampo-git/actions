@@ -39,8 +39,8 @@ async function run() {
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
-    const dbHost = process.env.DBHOST;
-    const dbName = process.env.DATABASE;
+    const dbHost = 'devops';
+    const dbName = 'main';
 
     core.debug(`EVENT NAME: ${eventName}`);
 
