@@ -92,6 +92,27 @@ Toolkit.run(
     } else {
       tools.log.pending(`Deleting existing review app id ${app.id}`);
       await heroku.delete(`/review-apps/${app.id}`);
+
+      let checkStatus = async() => {
+        tools.log.debug(
+            `Checking deployment status for review app ${reviewAppId}`);
+        resp = await heroku.request({
+          path: `/review-apps/${reviewAppId}`,
+          method: "GET"
+        });
+
+        tools.log.debug('Response received', resp);
+
+        // if not pending, done = true;
+        if (resp.status === 'pending' || resp.status == 'creating') {
+          tools.log.debug("Waiting...");
+          await setTimeout(checkStatus, 30000);
+        } else {
+          tools.log.debug(`Response status: ${resp.status}`);
+        }
+      }
+
+      await checkStatus();
       tools.log.complete("Review app deleted");
     }
 
