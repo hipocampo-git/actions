@@ -72,18 +72,18 @@ async function run() {
             connectTimeout: 30000
           });
           return connection;
-          core.debug(someVar);
+          core.debug(someVar1);
         });
 
         const readResponse = await core.group('Do something else async', async () => {
           const [readResponse] = await connection.execute(readQuery);
           return readResponse
-          core.debug(someVar);
+          core.debug(someVar2);
         });
 
         core.debug(readResponse);
 
-        core.debug(someVar);
+        core.debug(someVar3);
 
 
        //
