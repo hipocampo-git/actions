@@ -4,7 +4,7 @@ const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
 
 // async function run() {
-core.group('Do something async', async () => {
+const foo = core.group('Do something async', async () => {
   try {
     core.startGroup("Logging context object");
     console.log(JSON.stringify(github.context, null, "\t"));
@@ -83,7 +83,7 @@ core.group('Do something async', async () => {
           connectTimeout: 30000
         });
 
-        connection.resolve(1);
+        // connection.resolve(1);
 
         connection.end();
 
@@ -158,3 +158,5 @@ core.group('Do something async', async () => {
     core.setOutput("pull-request-id", "something");
   }
 });
+
+foo.resolve(1);
