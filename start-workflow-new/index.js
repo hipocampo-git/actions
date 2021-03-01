@@ -91,7 +91,7 @@ const foo = core.group('Do something async', async () => {
 
         core.debug(readResponse);
 
-        // connection.end();
+        connection.end();
 
         // const readResponse = await core.group('Do something else async', async () => {
         //   const [readResponse] = await connection.execute(readQuery);
