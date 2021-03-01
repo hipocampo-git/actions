@@ -95,7 +95,7 @@ Toolkit.run(
 
       let checkStatus = async() => {
         tools.log.debug(
-            `Checking deployment status for review app ${app.id}`);
+            `Checking deletion status for review app ${app.id}`);
         let resp = await heroku.request({
           path: `/review-apps/${app.id}`,
           method: "GET"
@@ -108,7 +108,7 @@ Toolkit.run(
           tools.log.debug("Waiting...");
           await setTimeout(checkStatus, 30000);
         } else {
-          tools.log.debug(`Response status: ${resp.status}`);
+          tools.log.debug(`Delete response status: ${resp.status}`);
         }
       }
 
