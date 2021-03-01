@@ -3,7 +3,8 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
 
-async function run() {
+// async function run() {
+core.group('Do something async', async () => {
   try {
     core.startGroup("Logging context object");
     console.log(JSON.stringify(github.context, null, "\t"));
@@ -154,7 +155,14 @@ async function run() {
     core.setFailed(error.message);
     core.setOutput("pull-request-id", "something");
   }
-}
+});
 
-
-run();
+//
+//
+//
+// try {
+//   run();
+//   core.setOutput("pull-request-id", "something");
+// } catch (error) {
+//   core.setFailed(error.message);
+// }
