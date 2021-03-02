@@ -45,6 +45,21 @@ const foo = core.group('Do something async', async () => {
 
     core.debug(`EVENT NAME: ${eventName}`);
 
+    connection = await mysqlPromise.createConnection({
+      host: dbHost,
+      user: dbUser,
+      password: dbPassword,
+      database: dbName,
+      connectTimeout: 30000
+    });
+
+    let readQueryTemplate = (branchName) => {
+      return `SELECT * FROM workflows WHERE branch="${branchName}"`;
+    };
+
+    // let readQuery =
+    // `SELECT * FROM workflows WHERE branch="${branchNameOutput}"`;
+
     switch (eventName) {
       // if pull request event, do x
       // BRANCH NAME ==> ${GITHUB_HEAD_REF}
@@ -60,17 +75,9 @@ const foo = core.group('Do something async', async () => {
         // let insertId = null;
         let status = 'new';
         let herokuAppName = null;
-        let readQuery = `SELECT * FROM workflows WHERE branch="${branchNameOutput}"`;
 
-        connection = await mysqlPromise.createConnection({
-          host: dbHost,
-          user: dbUser,
-          password: dbPassword,
-          database: dbName,
-          connectTimeout: 30000
-        });
-
-        const [readResponse] = await connection.execute(readQuery);
+        const [readResponse] =
+            await connection.execute(readQueryTemplate(branchNameOutput));
 
         core.debug(readResponse);
 
@@ -92,7 +99,8 @@ const foo = core.group('Do something async', async () => {
           if (herokuAppName) {
             status = 'existing';
           }
-          console.log(`ci id ${ciIdOutput} found for branch ${branchNameOutput}`);
+          console.log(
+              `ci id ${ciIdOutput} found for branch ${branchNameOutput}`);
         }
         break;
       // if push event, do y
@@ -100,11 +108,22 @@ const foo = core.group('Do something async', async () => {
       // BRANCH NAME ==> do lookup in workflows table based of PR #
       // HEROKU APP ==> do lookup in workflows table based of PR #
       case 'push':
-        let begin = message.indexOf('(#') + '(#'.length;
-        let end = message.indexOf(')', begin);
-        prIdOutput = message.substring(begin, end).trim();
-        branchNameOutput = tools.context.ref;
+        let begin = commitMessage.indexOf('(#') + '(#'.length;
+        let end = commitMessage.indexOf(')', begin);
+        prIdOutput = commitMessage.substring(begin, end).trim();
+        // TODO: fill this in.
+        // branchNameOutput = tools.context.ref;
         herokuAppOutput = herokuAppPrefix + prIdOutput;
+
+        const [readResponse2] =
+            await connection.execute(readQueryTemplate(branchNameOutput));
+
+        if (readResponse2.length === 0) {
+          core.setFailed(
+              'No CI workflow db entry found during push to master event');
+        } else {
+          ciIdOutput = readResponse2.insertId;
+        }
         break;
       // if workflow dispatch event do z
       //  BRANCH NAME ==> ${GITHUB_REF#refs/heads/}
