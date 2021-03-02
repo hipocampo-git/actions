@@ -140,10 +140,12 @@ Toolkit.run(
     // Also check for apps using the same branch name
     // Filter to the one for this branch
     tools.log.debug('app data');
-    tools.log.debug(app);
-    app = reviewApps.find((app) => app.ref === branch);
+    app = reviewApps.find((app) => {
+      tools.log.debug(app);
+      return app.branch === branch;
+    });
     if (!app) {
-      tools.log.info(`Did not find review app for PR number ${pr_number}`);
+      tools.log.info(`Did not find review app for branch ${branch}`);
       // return;
     } else {
       tools.log.pending(`Deleting existing review app id ${app.id}`);
