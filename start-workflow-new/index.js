@@ -55,8 +55,8 @@ const foo = core.group('Do something async', async () => {
       connectTimeout: 30000
     });
 
-    let readQueryTemplate = (branchName) => {
-      return `SELECT * FROM workflows WHERE branch="${branchName}"`;
+    let readQueryTemplate = (prId) => {
+      return `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
     };
 
     // let readQuery =
@@ -80,12 +80,12 @@ const foo = core.group('Do something async', async () => {
         let herokuAppName = null;
 
         const [readResponse] =
-            await connection.execute(readQueryTemplate(branchNameOutput));
+            await connection.execute(readQueryTemplate(prIdOutput));
 
         core.debug(readResponse);
 
         if (readResponse.length === 0) {
-          console.log('Branch name not found, creating new ci entry.');
+          console.log('pull request id not found, creating new ci entry.');
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name)
@@ -93,17 +93,19 @@ const foo = core.group('Do something async', async () => {
 
           const [response] = await connection.execute(query);
 
-          ciIdOutput = response.insertId;
+          // ciIdOutput = response.insertId;
         } else {
-          ciIdOutput = readResponse[0].id;
-          herokuAppName = readResponse[0].heroku_app;
+          // ciIdOutput = readResponse[0].id;
+          // herokuAppName = readResponse[0].heroku_app;
+          // instanceNameOutput = readResponse[0].database_name;
+          // prIdOutput =
           // It's possible that we created the db record but failed prior to
           // deploying heroku.
           if (herokuAppName) {
             status = 'existing';
           }
-          console.log(
-              `ci id ${ciIdOutput} found for branch ${branchNameOutput}`);
+          // console.log(
+          //     `ci id ${ciIdOutput} found for branch ${branchNameOutput}`);
         }
         break;
       // if push event, do y
