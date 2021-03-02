@@ -21,8 +21,8 @@ outputs:
     description: "pull request id extracted from the commit message"
   heroku-app-name:
     description: "name of the heroku app"
-  ci-id:
-    description: "id from the workflows db table"
+  instance-name:
+    description: "name of the database and the google bucket"
   deploy-status:
     description: "status of the deployment"
 runs:

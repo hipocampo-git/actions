@@ -35,8 +35,10 @@ const foo = core.group('Do something async', async () => {
     let prIdOutput = '';
     let herokuAppOutput = '';
     let branchNameOutput = '';
-    let ciIdOutput = '';
+    let instanceNameOutput = '';
+    // let ciIdOutput = '';
     const herokuAppPrefix = 'hipocampo-pr-';
+    const instancePrefix = 'hipocampo-test-ci-';
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
@@ -71,6 +73,7 @@ const foo = core.group('Do something async', async () => {
         branchNameOutput =  github.context.payload.pull_request.head.ref;
         prIdOutput = github.context.payload.number;
         herokuAppOutput = herokuAppPrefix + prIdOutput;
+        instanceNameOutput = instancePrefix + prIdOutput;
 
         // let insertId = null;
         let status = 'new';
@@ -85,8 +88,8 @@ const foo = core.group('Do something async', async () => {
           console.log('Branch name not found, creating new ci entry.');
           const query =
               `INSERT INTO workflows
-               (branch, pull_request_id)
-               VALUES ("${branchNameOutput}", ${prIdOutput})`;
+               (branch, pull_request_id, heroku_app, database_name)
+               VALUES ("${branchNameOutput}", ${prIdOutput}, "${herokuAppOutput}", "${instanceNameOutput})`;
 
           const [response] = await connection.execute(query);
 
@@ -136,7 +139,7 @@ const foo = core.group('Do something async', async () => {
               'No CI workflow db entry found during push to master event');
           return;
         } else {
-          ciIdOutput = readResponse2[0].insertId;
+          instanceNameOutput = readResponse2[0].database_name;
           branchNameOutput = readResponse2[0].branch;
         }
         break;
@@ -161,7 +164,7 @@ const foo = core.group('Do something async', async () => {
     core.setOutput("pull-request-id", prIdOutput);
     core.setOutput("heroku-app-name", herokuAppOutput);
     core.setOutput("branch-name", branchNameOutput);
-    core.setOutput("ci-id", ciIdOutput);
+    core.setOutput("instance-name", instanceNameOutput);
     // connection.end();
   } catch (error) {
     core.setFailed(error.message);
