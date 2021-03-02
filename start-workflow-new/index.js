@@ -136,8 +136,8 @@ const foo = core.group('Do something async', async () => {
               'No CI workflow db entry found during push to master event');
           return;
         } else {
-          ciIdOutput = readResponse2.insertId;
-          branchNameOutput = readResponse2.branch;
+          ciIdOutput = readResponse2[0].insertId;
+          branchNameOutput = readResponse2[0].branch;
         }
         break;
       // if workflow dispatch event do z
