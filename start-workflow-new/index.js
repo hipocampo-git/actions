@@ -89,7 +89,7 @@ const foo = core.group('Do something async', async () => {
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name)
-               VALUES ("${branchNameOutput}", ${prIdOutput}, "${herokuAppOutput}", "${instanceNameOutput})`;
+               VALUES ("${branchNameOutput}", ${prIdOutput}, "${herokuAppOutput}", "${instanceNameOutput}")`;
 
           const [response] = await connection.execute(query);
 
