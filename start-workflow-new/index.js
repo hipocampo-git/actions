@@ -116,6 +116,8 @@ const foo = core.group('Do something async', async () => {
         let readQuery2 =
             `SELECT * FROM workflows WHERE pull_request_id=${prIdOutput}`;
 
+        core.debug(readQuery2);
+
         const [readResponse2] =
             await connection.execute(readQuery2);
 
