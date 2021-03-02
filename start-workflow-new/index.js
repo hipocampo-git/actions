@@ -111,18 +111,20 @@ const foo = core.group('Do something async', async () => {
         let begin = commitMessage.indexOf('(#') + '(#'.length;
         let end = commitMessage.indexOf(')', begin);
         prIdOutput = commitMessage.substring(begin, end).trim();
-        // TODO: fill this in.
-        // branchNameOutput = tools.context.ref;
         herokuAppOutput = herokuAppPrefix + prIdOutput;
 
+        let readQuery2 =
+            `SELECT * FROM workflows WHERE pull_request_id=${prIdOutput}`;
+
         const [readResponse2] =
-            await connection.execute(readQueryTemplate(branchNameOutput));
+            await connection.execute(readQuery2);
 
         if (readResponse2.length === 0) {
           core.setFailed(
               'No CI workflow db entry found during push to master event');
         } else {
           ciIdOutput = readResponse2.insertId;
+          branchNameOutput = readResponse2.branch;
         }
         break;
       // if workflow dispatch event do z
@@ -134,9 +136,6 @@ const foo = core.group('Do something async', async () => {
         // TODO: figure out the specific string for workflow dispatch events.
         break;
     }
-
-
-
 
     // const response = await octokit.issues.create({
     //   ...github.context.repo,
