@@ -21,7 +21,7 @@ const foo = core.group('Do something async', async () => {
     core.endGroup();
 
     const token = core.getInput("token");
-    const commitMessage = core.getInput("commit-message");
+    // const commitMessage = core.getInput("commit-message");
     // const eventName = core.getInput("event-name");
     const eventName = github.context.eventName;
     const prId = core.getInput("pull-request-id");
@@ -108,9 +108,19 @@ const foo = core.group('Do something async', async () => {
       // BRANCH NAME ==> do lookup in workflows table based of PR #
       // HEROKU APP ==> do lookup in workflows table based of PR #
       case 'push':
+        // const commits = github.context.payload.commits;
+
+        const commitMessage = github.context.payload.head_commit.message;
         let begin = commitMessage.indexOf('(#') + '(#'.length;
         let end = commitMessage.indexOf(')', begin);
         prIdOutput = commitMessage.substring(begin, end).trim();
+
+        if (! prIdOutput) {
+          core.setFailed(
+              'Failed to parse pull request # from commit message');
+          return;
+        }
+
         herokuAppOutput = herokuAppPrefix + prIdOutput;
 
         let readQuery2 =
@@ -124,6 +134,7 @@ const foo = core.group('Do something async', async () => {
         if (readResponse2.length === 0) {
           core.setFailed(
               'No CI workflow db entry found during push to master event');
+          return;
         } else {
           ciIdOutput = readResponse2.insertId;
           branchNameOutput = readResponse2.branch;

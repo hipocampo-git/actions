@@ -2,9 +2,6 @@ name: "Start Workflow (new)"
 author: "Oliver Pike"
 description: "Parses commit messages to extract data like the pull request id"
 inputs:
-  commit-message:
-    description: "commit message to parse"
-    required: true
   event-name:
     description: "event name ('push', 'pull request', etc.)"
     required: true
