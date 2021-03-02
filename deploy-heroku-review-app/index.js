@@ -98,7 +98,50 @@ Toolkit.run(
     tools.log.complete("Fetched review app list");
 
     // Filter to the one for this PR
-    const app = reviewApps.find((app) => app.pr_number == pr_number);
+    let app = reviewApps.find((app) => app.pr_number == pr_number);
+    if (!app) {
+      tools.log.info(`Did not find review app for PR number ${pr_number}`);
+      // return;
+    } else {
+      tools.log.pending(`Deleting existing review app id ${app.id}`);
+      await heroku.delete(`/review-apps/${app.id}`);
+
+      let checkDeleteStatus = async() => {
+        tools.log.debug(
+            `Checking deletion status for review app ${app.id}`);
+        let resp = await heroku.request({
+          path: `/review-apps/${app.id}`,
+          method: "GET"
+        });
+
+        tools.log.debug('Response received', resp);
+
+        // if not pending, done = true;
+        if (resp.status === 'deleting') {
+          tools.log.debug("Waiting...");
+          await sleep(checkDeleteStatus, 20000);
+        } else if (resp.status === 'errored') {
+          tools.log.fatal('Heroku deletion failed');
+          tools.log.debug(JSON.stringify(resp));
+          return;
+        } else if (resp.status === 'deleted') {
+          tools.log.debug(`Successfully deleted app ${app.id}`);
+        } else {
+          tools.log.fatal(`Unexpected delete response status: ${resp.status}`);
+          tools.log.debug(JSON.stringify(resp));
+          return
+        }
+      }
+
+      await checkDeleteStatus();
+      tools.log.debug("Review app deleted");
+    }
+
+    // Also check for apps using the same branch name
+    // Filter to the one for this branch
+    tools.log.debug('app data');
+    tools.log.debug(app);
+    app = reviewApps.find((app) => app.ref === branch);
     if (!app) {
       tools.log.info(`Did not find review app for PR number ${pr_number}`);
       // return;
