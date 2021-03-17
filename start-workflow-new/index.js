@@ -46,7 +46,6 @@ core.group('Doing something async', async () => {
         herokuAppOutput = herokuAppPrefix + prIdOutput;
         instanceNameOutput = instancePrefix + prIdOutput;
 
-
         let status = 'new';
         let herokuAppName = null;
 
