@@ -65,10 +65,11 @@ core.group('Doing something async', async () => {
           // the instance name.
           // If a database is deleted, google doesn't let you reuse the same
           // name for a period of time.
-          core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
-          if (readResponse[0].database_suffix !== 'NULL') {
-            instanceNameOutput += `-${readResponse[0].database_suffix}`;
-          }
+          // THIS IS A WIP
+          // core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
+          // if (readResponse[0].database_suffix !== 'NULL') {
+          //   instanceNameOutput += `-${readResponse[0].database_suffix}`;
+          // }
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
 
