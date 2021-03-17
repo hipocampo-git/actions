@@ -15,6 +15,7 @@ core.group('Doing something async', async () => {
     let herokuAppOutput = '';
     let branchNameOutput = '';
     let instanceNameOutput = '';
+    let skipDeployOutput = false;
 
     const herokuAppPrefix = 'hipocampo-pr-';
     const instancePrefix = 'hipocampo-test-ci-';
@@ -45,6 +46,7 @@ core.group('Doing something async', async () => {
         herokuAppOutput = herokuAppPrefix + prIdOutput;
         instanceNameOutput = instancePrefix + prIdOutput;
 
+
         let status = 'new';
         let herokuAppName = null;
 
@@ -60,6 +62,17 @@ core.group('Doing something async', async () => {
 
           const [response] = await connection.execute(query);
         } else {
+          // Check if there's a database suffix value and if so, append it to
+          // the instance name.
+          // If a database is deleted, google doesn't let you reuse the same
+          // name for a period of time.
+          core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
+          if (readResponse[0].database_suffix !== 'NULL') {
+            instanceNameOutput += `-${readResponse[0].database_suffix}`;
+          }
+
+          skipDeployOutput = (!! readResponse[0].skip_deploy);
+
           // It's possible that we created the db record but failed prior to
           // deploying heroku.
           if (herokuAppName) {
@@ -110,9 +123,9 @@ core.group('Doing something async', async () => {
     core.setOutput("heroku-app-name", herokuAppOutput);
     core.setOutput("branch-name", branchNameOutput);
     core.setOutput("instance-name", instanceNameOutput);
+    core.setOutput("skip-deploy", skipDeployOutput);
   } catch (error) {
     core.setFailed(error.message);
-    core.setOutput("pull-request-id", "something");
   } finally {
     if (connection) {
       // NOTE: The github action won't terminate without this line.

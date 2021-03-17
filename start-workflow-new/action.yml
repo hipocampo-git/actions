@@ -19,6 +19,8 @@ outputs:
     description: "name of the database and the google bucket"
   deploy-status:
     description: "status of the deployment"
+  skip-deploy:
+    description: "Inform the workflow to skip the heroku deployment"
 runs:
   using: "node12"
   main: "index.js"
