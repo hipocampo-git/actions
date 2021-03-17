@@ -46,7 +46,6 @@ core.group('Doing something async', async () => {
         herokuAppOutput = herokuAppPrefix + prIdOutput;
         instanceNameOutput = instancePrefix + prIdOutput;
 
-
         let status = 'new';
         let herokuAppName = null;
 
@@ -71,7 +70,8 @@ core.group('Doing something async', async () => {
             instanceNameOutput += `-${readResponse[0].database_suffix}`;
           }
 
-          skipDeployOutput = (!! readResponse[0].skip_deploy);
+          skipDeployOutput = (readResponse[0].skip_deploy === 1);
+          console.log(`Setting 'skip-deploy' to ${skipDeployOutput}`);
 
           // It's possible that we created the db record but failed prior to
           // deploying heroku.
@@ -126,7 +126,6 @@ core.group('Doing something async', async () => {
     core.setOutput("skip-deploy", skipDeployOutput);
   } catch (error) {
     core.setFailed(error.message);
-    core.setOutput("pull-request-id", "something");
   } finally {
     if (connection) {
       // NOTE: The github action won't terminate without this line.
