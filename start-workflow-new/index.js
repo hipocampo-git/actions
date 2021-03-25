@@ -66,7 +66,9 @@ core.group('Doing something async', async () => {
           // If a database is deleted, google doesn't let you reuse the same
           // name for a period of time.
           core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
-          if (readResponse[0].database_suffix !== 'null') {
+          // Have gone back and forth on this, but null (non-string value)
+          // should be the correct literal for the comparison below.
+          if (readResponse[0].database_suffix !== null) {
             instanceNameOutput += `-${readResponse[0].database_suffix}`;
           }
 
