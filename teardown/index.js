@@ -22,6 +22,8 @@ core.group('Doing something async', async () => {
     });
     const client = await auth.getClient();
     console.log('HERE 10');
+    const instances = sqlAdmin.instances();
+    console.log(instances);
 
     // Delete all databases
 
