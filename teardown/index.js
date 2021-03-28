@@ -30,10 +30,6 @@ core.group('Doing something async', async () => {
       projectId: 'bitcoin-core-test'
     });
 
-    google.options({
-      auth: auth
-    });
-
     // const client = await auth.getClient();
     let sqlAdmin = google.sqladmin('v1beta4');
     // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
