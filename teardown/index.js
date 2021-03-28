@@ -4,7 +4,7 @@ const mysqlPromise = require('mysql2/promise');
 const {Storage} = require('@google-cloud/storage');
 // import { Storage, UploadResponse, StorageOptions } from '@google-cloud/storage';
 const {google} = require('googleapis');
-let sqlAdmin = google.sqladmin('v1beta4');
+
 // const {GoogleAuth} = require("google-auth-library");
 
 core.group('Doing something async', async () => {
@@ -20,7 +20,9 @@ core.group('Doing something async', async () => {
       keyFile: './sql/keyfile.json',
       scopes: 'https://www.googleapis.com/auth/cloud-platform'
     });
-    const client = await auth.getClient();
+    // const client = await auth.getClient();
+    // let sqlAdmin = google.sqladmin('v1beta4');
+    let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
     const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test'});
     console.log(instances);
