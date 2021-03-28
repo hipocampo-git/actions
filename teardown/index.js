@@ -4,6 +4,7 @@ const mysqlPromise = require('mysql2/promise');
 const {Storage} = require('@google-cloud/storage');
 // import { Storage, UploadResponse, StorageOptions } from '@google-cloud/storage';
 const {google} = require('googleapis');
+let sqlAdmin = google.sqladmin('v1beta4');
 
 // const {GoogleAuth} = require("google-auth-library");
 
@@ -24,17 +25,22 @@ core.group('Doing something async', async () => {
     //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
     // });
     // https://googleapis.dev/nodejs/google-auth-library/5.5.0/interfaces/GoogleAuthOptions.html#info
-    const auth = new google.auth.GoogleAuth({
+    // const auth = new google.auth.GoogleAuth({
+    //   keyFilename: './admin_sa_key.json',
+    //   scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    //   projectId: 'bitcoin-core-test'
+    // });
+
+    const client = await google.auth.getClient({
       keyFilename: './admin_sa_key.json',
-      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
       projectId: 'bitcoin-core-test'
     });
 
-    // const client = await auth.getClient();
-    let sqlAdmin = google.sqladmin('v1beta4');
     // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
-    const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test'});
+    const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
+      auth: client});
     console.log(instances);
 
     // Delete all databases
