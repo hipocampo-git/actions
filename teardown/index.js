@@ -5,7 +5,7 @@ const {Storage} = require('@google-cloud/storage');
 // import { Storage, UploadResponse, StorageOptions } from '@google-cloud/storage';
 const {google} = require('googleapis');
 let sqlAdmin = google.sqladmin('v1beta4');
-const {auth} = require("google-auth-library");
+const {GoogleAuth} = require("google-auth-library");
 
 core.group('Doing something async', async () => {
   let connection = null;
@@ -41,8 +41,6 @@ core.group('Doing something async', async () => {
     //     // bucket.delete();
     //   }
     // });
-
-
 
     // delete all buckets
     console.log('here 1');
