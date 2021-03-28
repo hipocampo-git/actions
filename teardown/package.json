@@ -1,0 +1,23 @@
+{
+  "name": "heroku-review-app",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "jest",
+    "build": "npx @vercel/ncc build && npx convert-action"
+  },
+  "dependencies": {
+    "actions-toolkit": "6.0.1",
+    "@actions/core": "1.2.6",
+    "@actions/github": "4.0.0",
+    "@google-cloud/storage": "5.8.2",
+    "googleapis": "68.0.0",
+    "google-auth-library": "7.0.3",
+    "heroku-client": "3.1.0",
+    "mysql2": "2.1.0"
+  },
+  "devDependencies": {
+    "jest": "25.2.7"
+  }
+}
