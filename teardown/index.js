@@ -17,7 +17,7 @@ core.group('Doing something async', async () => {
 
     // find all databases starting with the instance prefix
     const auth = new GoogleAuth({
-      keyFile: 'keyfile.json',
+      keyFile: './sql/keyfile.json',
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
     });
     const client = await auth.getClient();
