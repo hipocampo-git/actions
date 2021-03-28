@@ -31,7 +31,7 @@ core.group('Doing something async', async () => {
     });
 
     // const client = await auth.getClient();
-    // let sqlAdmin = google.sqladmin('v1beta4');
+    let sqlAdmin = google.sqladmin('v1beta4');
     // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
     const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test'});
