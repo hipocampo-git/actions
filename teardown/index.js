@@ -5,7 +5,7 @@ const {Storage} = require('@google-cloud/storage');
 // import { Storage, UploadResponse, StorageOptions } from '@google-cloud/storage';
 const {google} = require('googleapis');
 let sqlAdmin = google.sqladmin('v1beta4');
-const {GoogleAuth} = require("google-auth-library");
+// const {GoogleAuth} = require("google-auth-library");
 
 core.group('Doing something async', async () => {
   let connection = null;
@@ -16,9 +16,9 @@ core.group('Doing something async', async () => {
     const instancePrefix = `hipocampo-test-ci-${prId}`;
 
     // find all databases starting with the instance prefix
-    const auth = new GoogleAuth({
+    const auth = new google.auth.GoogleAuth({
       keyFile: './sql/keyfile.json',
-      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      scopes: 'https://www.googleapis.com/auth/cloud-platform'
     });
     const client = await auth.getClient();
     console.log('HERE 10');
