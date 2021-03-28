@@ -23,6 +23,7 @@ core.group('Doing something async', async () => {
     //   keyFile: './sql/keyfile.json',
     //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
     // });
+    // https://googleapis.dev/nodejs/google-auth-library/5.5.0/interfaces/GoogleAuthOptions.html#info
     const auth = new google.auth.GoogleAuth({
       keyFilename: './admin_sa_key.json',
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
@@ -30,10 +31,10 @@ core.group('Doing something async', async () => {
     });
 
     // const client = await auth.getClient();
-    // let sqlAdmin = google.sqladmin('v1beta4');
-    let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
+    let sqlAdmin = google.sqladmin('v1beta4');
+    // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
-    const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test'});
+    const instances = await sqlAdmin.instances.list();
     console.log(instances);
 
     // Delete all databases
