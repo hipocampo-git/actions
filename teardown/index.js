@@ -16,7 +16,7 @@ core.group('Doing something async', async () => {
     // Take in the pr #
     const instancePrefix = `hipocampo-test-ci-${prId}`;
 
-    const gcp_sa_key = core.getSecret('myPassword');
+    // const gcp_sa_key = core.getSecret('myPassword');
 
     // find all databases starting with the instance prefix
     // const auth = new google.auth.GoogleAuth({
