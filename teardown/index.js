@@ -24,9 +24,11 @@ core.group('Doing something async', async () => {
     //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
     // });
     const auth = new google.auth.GoogleAuth({
-      keyFile: './admin_sa_key.json',
-      scopes: 'https://www.googleapis.com/auth/cloud-platform'
+      keyFilename: './admin_sa_key.json',
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      projectId: 'bitcoin-core-test'
     });
+
     // const client = await auth.getClient();
     // let sqlAdmin = google.sqladmin('v1beta4');
     let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
