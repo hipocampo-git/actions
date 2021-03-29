@@ -9,42 +9,43 @@ core.group('Doing something async', async () => {
   let connection = null;
   try {
     const prId = core.getInput('pull-request-id');
-    const instancePrefix = `hipocampo-test-ci-${prId}`;
+    const instancePrefix = 'hipocampo-test-ci-537';
+    // const instancePrefix = `hipocampo-test-ci-${prId}`;
 
-    // const auth = new google.auth.GoogleAuth({
-    //   keyFilename: `./admin_sa_key.json`,
-    //   scopes: 'https://www.googleapis.com/auth/cloud-platform',
-    //   projectId: 'bitcoin-core-test'
-    // });
-    //
-    // let sqlAdmin = google.sqladmin('v1beta4');
-    //
-    // console.log('HERE 10');
-    // const instances = await sqlAdmin.instances.list(
-    //     {project: 'bitcoin-core-test', auth: auth});
-    //
-    // instances.data.items.forEach((instance) => {
-    //   if (instance.name.startsWith(instancePrefix)) {
-    //     console.log(instance.name);
-    //   }
-    // });
+    const auth = new google.auth.GoogleAuth({
+      keyFilename: `./admin_sa_key.json`,
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      projectId: 'bitcoin-core-test'
+    });
+
+    let sqlAdmin = google.sqladmin('v1beta4');
+
+    const instances = await sqlAdmin.instances.list(
+        {project: 'bitcoin-core-test', auth: auth});
+
+    instances.data.items.forEach((instance) => {
+      if (instance.name.startsWith(instancePrefix)) {
+        console.log(instance.name);
+        instance.delete();
+      }
+    });
 
 
     // Find all buckets starting with the instance prefix
-    const storage = new Storage({
-      projectId: 'bitcoin-core-test',
-      keyFilename: './admin_storage_sa_key.json'
-    });
-    const [buckets] = await storage.getBuckets();
-
-    console.log('Buckets:');
-    buckets.forEach(bucket => {
-      console.log(bucket.name);
-      if (bucket.name.startsWith('instancePrefix')) {
-        console.log(`Deleting bucket ${bucket.name}`);
-        // bucket.delete();
-      }
-    });
+    // const storage = new Storage({
+    //   projectId: 'bitcoin-core-test',
+    //   keyFilename: './admin_storage_sa_key.json'
+    // });
+    // const [buckets] = await storage.getBuckets();
+    //
+    // console.log('Buckets:');
+    // buckets.forEach(bucket => {
+    //   console.log(bucket.name);
+    //   if (bucket.name.startsWith('instancePrefix')) {
+    //     console.log(`Deleting bucket ${bucket.name}`);
+    //     // bucket.delete();
+    //   }
+    // });
 
     // delete all buckets
     console.log('here 1');
