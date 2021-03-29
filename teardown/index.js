@@ -28,7 +28,8 @@ core.group('Doing something async', async () => {
         console.log(instance.name);
         await sqlAdmin.instances.delete({
           project: 'bitcoin-core-test',
-          instance: instance.name
+          instance: instance.name,
+          auth: auth
         });
       }
     }
