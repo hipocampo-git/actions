@@ -1,6 +1,6 @@
-name: "Start Workflow (new)"
+name: "Teardown"
 author: "Oliver Pike"
-description: "Parses commit messages to extract data like the pull request id"
+description: "Deletes the cloned databases and buckets"
 inputs:
   pull-request-id:
     description: "pull request #"
@@ -8,19 +8,6 @@ inputs:
   token:
     description: "Github Token"
     required: true
-outputs:
-  branch-name:
-    description: "pull request branch name"
-  pull-request-id:
-    description: "pull request id extracted from the commit message"
-  heroku-app-name:
-    description: "name of the heroku app"
-  instance-name:
-    description: "name of the database and the google bucket"
-  deploy-status:
-    description: "status of the deployment"
-  skip-deploy:
-    description: "Inform the workflow to skip the heroku deployment"
 runs:
   using: "node12"
   main: "index.js"

@@ -1,4 +1,5 @@
 const core = require("@actions/core");
+const github = require("@actions/github");
 const {Storage} = require('@google-cloud/storage');
 const {google} = require('googleapis');
 
@@ -6,8 +7,13 @@ core.group('Doing something async', async () => {
   let connection = null;
   const projectName = 'bitcoin-core-test';
   try {
-    const prId = core.getInput('pull-request-id');
+    const prId = core.getInput('pull-request-id') || 'none';
     const instancePrefix = `hipocampo-test-ci-${prId}`;
+
+    console.log(`Pull request id #1: ${prId}`);
+    console.log(`Pull request id #2: ${github.context.payload.number}`);
+    console.log(`Instance prefix: ${instancePrefix}`);
+
 
     const auth = new google.auth.GoogleAuth({
       keyFilename: `./admin_sa_key.json`,
