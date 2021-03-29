@@ -23,12 +23,23 @@ core.group('Doing something async', async () => {
     const instances = await sqlAdmin.instances.list(
         {project: 'bitcoin-core-test', auth: auth});
 
-    instances.data.items.forEach((instance) => {
+    for (const instance of instances.data.items) {
       if (instance.name.startsWith(instancePrefix)) {
         console.log(instance.name);
-        instance.delete();
-      }
-    });
+        await sqlAdmin.instances.delete({
+          project: 'bitcoin-core-test',
+          resourceId: instance.name
+        });
+    }
+
+    // instances.data.items.forEach((instance) => {
+    //   if (instance.name.startsWith(instancePrefix)) {
+    //     console.log(instance.name);
+    //     await sqlAdmin.instances.delete({
+    //
+    //     });
+    //   }
+    // });
 
 
     // Find all buckets starting with the instance prefix
