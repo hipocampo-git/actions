@@ -25,7 +25,7 @@ core.group('Doing something async', async () => {
     console.log('HERE 10');
     // const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
     //   auth: auth});
-    const instances = await sqlAdmin.instances.list({auth: auth});
+    const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test'});
 
     instances.data.items.forEach((instance) => {
       if (instance.name.startsWith(instancePrefix)) {
