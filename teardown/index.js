@@ -15,6 +15,7 @@ core.group('Doing something async', async () => {
     console.log(`Instance prefix: ${instancePrefix}`);
 
 
+    console.log('Tearing down databases');
     const auth = new google.auth.GoogleAuth({
       keyFilename: `./admin_sa_key.json`,
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
@@ -43,11 +44,18 @@ core.group('Doing something async', async () => {
     });
     const [buckets] = await storage.getBuckets();
 
-    console.log('Buckets:');
+    console.log('Tearing down buckets');
     for (const bucket of buckets) {
       console.log(bucket.name);
       if (bucket.name.startsWith(instancePrefix)) {
+        // Delete the files first
+        const [files] = await storage.bucket(bucket.name).getFiles();
+        for (const file of files) {
+          console.log(`Deleting file: ${file.name}`);
+          await file.delete();
+        };
         console.log(`Deleting bucket: ${bucket.name}`);
+        // await storage.bucket(bucketName).delete();
         await bucket.delete();
       }
     }
