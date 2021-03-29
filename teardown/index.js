@@ -12,24 +12,12 @@ core.group('Doing something async', async () => {
   let connection = null;
   try {
     const prId = core.getInput('pull-request-id');
-    const saKey = core.getInput('admin-sa-key');
+    const instancePrefix = `hipocampo-test-ci-${prId}`;
 
-    // Take in the pr #
-    const instancePrefix = `hipocampo-test-ci`;
-    // const instancePrefix = `hipocampo-test-ci-${prId}`;
-
-    // const gcp_sa_key = core.getSecret('myPassword');
-
-    // find all databases starting with the instance prefix
-    // const auth = new google.auth.GoogleAuth({
-    //   keyFile: './sql/keyfile.json',
-    //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
-    // });
-    // https://googleapis.dev/nodejs/google-auth-library/5.5.0/interfaces/GoogleAuthOptions.html#info
     const fullpath = '/home/runner/work/hipocampo/hipocampo';
 
     const auth = new google.auth.GoogleAuth({
-      keyFilename: `${fullpath}/admin2.json`,
+      keyFilename: `./admin2.json`,
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
       projectId: 'bitcoin-core-test'
     });
