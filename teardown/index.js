@@ -4,7 +4,7 @@ const mysqlPromise = require('mysql2/promise');
 const {Storage} = require('@google-cloud/storage');
 // import { Storage, UploadResponse, StorageOptions } from '@google-cloud/storage';
 const {google} = require('googleapis');
-let sqlAdmin = google.sqladmin('v1beta4');
+
 
 // const {GoogleAuth} = require("google-auth-library");
 
@@ -31,8 +31,12 @@ core.group('Doing something async', async () => {
     //   projectId: 'bitcoin-core-test'
     // });
 
+    const fullpath = '/home/runner/work/hipocampo/hipocampo';
+
+    let sqlAdmin = google.sqladmin('v1beta4');
+
     const client = await google.auth.getClient({
-      keyFilename: './admin_sa_key.json',
+      keyFilename: `${fullpath}/admin_sa_key.json`,
       scopes: ['https://www.googleapis.com/auth/cloud-platform'],
       projectId: 'bitcoin-core-test'
     });
