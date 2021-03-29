@@ -46,6 +46,7 @@ core.group('Doing something async', async () => {
     const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
       auth: auth});
     console.log(instances);
+    console.log(instances.data.items[0]);
 
     // Delete all databases
 
