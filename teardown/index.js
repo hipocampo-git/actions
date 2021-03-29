@@ -30,6 +30,7 @@ core.group('Doing something async', async () => {
           project: 'bitcoin-core-test',
           resourceId: instance.name
         });
+      }
     }
 
     // instances.data.items.forEach((instance) => {
