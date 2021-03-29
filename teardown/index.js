@@ -14,8 +14,6 @@ core.group('Doing something async', async () => {
     const prId = core.getInput('pull-request-id');
     const instancePrefix = `hipocampo-test-ci-${prId}`;
 
-    const fullpath = '/home/runner/work/hipocampo/hipocampo';
-
     const auth = new google.auth.GoogleAuth({
       keyFilename: `./admin2.json`,
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
@@ -24,18 +22,10 @@ core.group('Doing something async', async () => {
 
     let sqlAdmin = google.sqladmin('v1beta4');
 
-    // const client = await google.auth.getClient({
-    //   keyFilename: `${fullpath}/admin_sa_key.json`,
-    //   scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-    //   projectId: 'bitcoin-core-test'
-    // });
-
-    // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
-    const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
-      auth: auth});
-    // console.log(instances);
-    // console.log(instances.data.items[0]);
+    // const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
+    //   auth: auth});
+    const instances = await sqlAdmin.instances.list({auth: auth});
 
     instances.data.items.forEach((instance) => {
       if (instance.name.startsWith(instancePrefix)) {
