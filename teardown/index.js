@@ -15,7 +15,8 @@ core.group('Doing something async', async () => {
     const saKey = core.getInput('admin-sa-key');
 
     // Take in the pr #
-    const instancePrefix = `hipocampo-test-ci-${prId}`;
+    const instancePrefix = `hipocampo-test-ci`;
+    // const instancePrefix = `hipocampo-test-ci-${prId}`;
 
     // const gcp_sa_key = core.getSecret('myPassword');
 
@@ -45,8 +46,14 @@ core.group('Doing something async', async () => {
     console.log('HERE 10');
     const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
       auth: auth});
-    console.log(instances);
-    console.log(instances.data.items[0]);
+    // console.log(instances);
+    // console.log(instances.data.items[0]);
+
+    instances.data.items.forEach((instance) => {
+      if (instance.name.startsWith(instancePrefix)) {
+        console.log(instance.name);
+      }
+    });
 
     // Delete all databases
 
