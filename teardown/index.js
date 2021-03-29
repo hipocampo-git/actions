@@ -28,7 +28,7 @@ core.group('Doing something async', async () => {
     const fullpath = '/home/runner/work/hipocampo/hipocampo';
 
     const auth = new google.auth.GoogleAuth({
-      keyFilename: `${fullpath}/admin_sa_key.json`,
+      keyFilename: `${fullpath}/admin_sa_key.jsonxx`,
       scopes: 'https://www.googleapis.com/auth/cloud-platform',
       projectId: 'bitcoin-core-test'
     });
