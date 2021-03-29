@@ -25,26 +25,27 @@ core.group('Doing something async', async () => {
     //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
     // });
     // https://googleapis.dev/nodejs/google-auth-library/5.5.0/interfaces/GoogleAuthOptions.html#info
-    // const auth = new google.auth.GoogleAuth({
-    //   keyFilename: './admin_sa_key.json',
-    //   scopes: 'https://www.googleapis.com/auth/cloud-platform',
-    //   projectId: 'bitcoin-core-test'
-    // });
-
     const fullpath = '/home/runner/work/hipocampo/hipocampo';
+
+    const auth = new google.auth.GoogleAuth({
+      keyFilename: `${fullpath}/admin_sa_key.json`,
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      projectId: 'bitcoin-core-test'
+    });
+
 
     let sqlAdmin = google.sqladmin('v1beta4');
 
-    const client = await google.auth.getClient({
-      keyFilename: `${fullpath}/admin_sa_key.json`,
-      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-      projectId: 'bitcoin-core-test'
-    });
+    // const client = await google.auth.getClient({
+    //   keyFilename: `${fullpath}/admin_sa_key.json`,
+    //   scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    //   projectId: 'bitcoin-core-test'
+    // });
 
     // let sqlAdmin = google.sqladmin({version: 'v1beta4', auth: auth});
     console.log('HERE 10');
     const instances = await sqlAdmin.instances.list({project: 'bitcoin-core-test',
-      auth: client});
+      auth: auth});
     console.log(instances);
 
     // Delete all databases
