@@ -15,6 +15,7 @@ core.group('Doing something async', async () => {
     let herokuAppOutput = '';
     let branchNameOutput = '';
     let instanceNameOutput = '';
+    let testTagsOutput = 'smoke';
     let skipDeployOutput = false;
 
     const herokuAppPrefix = 'hipocampo-pr-';
@@ -43,7 +44,6 @@ core.group('Doing something async', async () => {
       case 'pull_request':
         branchNameOutput =  github.context.payload.pull_request.head.ref;
         prIdOutput = github.context.payload.number;
-        herokuAppOutput = herokuAppPrefix + prIdOutput;
         instanceNameOutput = instancePrefix + prIdOutput;
 
         let status = 'new';
@@ -56,8 +56,9 @@ core.group('Doing something async', async () => {
           console.log('pull request id not found, creating new ci entry.');
           const query =
               `INSERT INTO workflows
-               (branch, pull_request_id, heroku_app, database_name)
-               VALUES ("${branchNameOutput}", ${prIdOutput}, "${herokuAppOutput}", "${instanceNameOutput}")`;
+               (branch, pull_request_id, heroku_app, database_name, test_tags)
+               VALUES ("${branchNameOutput}", ${prIdOutput}, "${herokuAppOutput}",
+                "${instanceNameOutput}", "${testTagsOutput})`;
 
           const [response] = await connection.execute(query);
         } else {
@@ -95,8 +96,6 @@ core.group('Doing something async', async () => {
           return;
         }
 
-        herokuAppOutput = herokuAppPrefix + prIdOutput;
-
         let readQuery2 =
             `SELECT * FROM workflows WHERE pull_request_id=${prIdOutput}`;
 
@@ -112,6 +111,7 @@ core.group('Doing something async', async () => {
         } else {
           instanceNameOutput = readResponse2[0].database_name;
           branchNameOutput = readResponse2[0].branch;
+          testTagsOutput = readResponse2[0].test_tags;
         }
         break;
       case 'default':
@@ -120,11 +120,14 @@ core.group('Doing something async', async () => {
         break;
     }
 
+    herokuAppOutput = herokuAppPrefix + prIdOutput;
+
     core.setOutput("pull-request-id", prIdOutput);
     core.setOutput("heroku-app-name", herokuAppOutput);
     core.setOutput("branch-name", branchNameOutput);
     core.setOutput("instance-name", instanceNameOutput);
     core.setOutput("skip-deploy", skipDeployOutput);
+    core.setOutput("test-tags", testTagsOutput);
   } catch (error) {
     core.setFailed(error.message);
   } finally {

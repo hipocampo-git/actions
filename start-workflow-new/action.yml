@@ -21,6 +21,8 @@ outputs:
     description: "status of the deployment"
   skip-deploy:
     description: "Inform the workflow to skip the heroku deployment"
+  test-tags:
+    description: "Which tags to use for filtering the cypress tests"
 runs:
   using: "node12"
   main: "index.js"
