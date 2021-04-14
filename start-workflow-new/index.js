@@ -67,6 +67,7 @@ core.group('Doing something async', async () => {
           // If a database is deleted, google doesn't let you reuse the same
           // name for a period of time.
           core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
+          core.info(`Database suffix: ${readResponse[0].database_suffix}`);
           // Have gone back and forth on this, but null (non-string value)
           // should be the correct literal for the comparison below.
           if (readResponse[0].database_suffix !== null) {
@@ -74,6 +75,7 @@ core.group('Doing something async', async () => {
           }
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
+          testTagsOutput = readResponse[0].test_tags;
 
           // It's possible that we created the db record but failed prior to
           // deploying heroku.
