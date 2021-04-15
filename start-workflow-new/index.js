@@ -67,6 +67,8 @@ core.group('Doing something async', async () => {
           // If a database is deleted, google doesn't let you reuse the same
           // name for a period of time.
           core.debug(`Database suffix: ${readResponse[0].database_suffix}`);
+          // Testing to see if info() statements should up in the caller
+          // even when ACTIONS_STEP_DEBUG is set to false.
           core.info(`Database suffix: ${readResponse[0].database_suffix}`);
           // Have gone back and forth on this, but null (non-string value)
           // should be the correct literal for the comparison below.
