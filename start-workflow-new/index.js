@@ -106,7 +106,7 @@ core.group('Doing something async', async () => {
         // These values should be fixed for push to master events
         testTagsOutput = 'all';
         sizesOutput = {
-          value: ['large', 'small']
+          value: ['large']
         };
 
         if (readResponse2.length === 0) {
