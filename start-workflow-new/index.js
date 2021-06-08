@@ -80,8 +80,7 @@ core.group('Doing something async', async () => {
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
           testTagsOutput = readResponse[0].test_tags;
-          // This should already come back from the db as Javascript
-          sizesOutput = readResponse[0].sizes;
+          sizesOutput = JSON.parse(readResponse[0].sizes);
         }
         break;
       case 'push':
@@ -133,7 +132,7 @@ core.group('Doing something async', async () => {
     core.setOutput("instance-name", instanceNameOutput);
     core.setOutput("skip-deploy", skipDeployOutput);
     core.setOutput("test-tags", testTagsOutput);
-    core.setOutput("sizes", sizesOutput);
+    core.setOutput("sizes", JSON.stringify(sizesOutput));
   } catch (error) {
     core.setFailed(error.message);
   } finally {
