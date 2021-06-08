@@ -17,7 +17,7 @@ core.group('Doing something async', async () => {
     let instanceNameOutput = '';
     let testTagsOutput = 'smoke';
     let sizesOutput = {
-      value: ['large', 'small']
+      value: ['large']
     };
     let skipDeployOutput = false;
 
@@ -106,7 +106,7 @@ core.group('Doing something async', async () => {
         // These values should be fixed for push to master events
         testTagsOutput = 'all';
         sizesOutput = {
-          value: ['large']
+          value: ['large', 'small']
         };
 
         if (readResponse2.length === 0) {
