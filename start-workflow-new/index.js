@@ -80,7 +80,11 @@ core.group('Doing something async', async () => {
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
           testTagsOutput = readResponse[0].test_tags;
-          sizesOutput = JSON.parse(readResponse[0].sizes);
+          // We'll use the default in the action code if the database contains
+          // null for sizes.
+          if (readResponse[0].sizes !== null) {
+            sizesOutput = JSON.parse(readResponse[0].sizes);
+          }
         }
         break;
       case 'push':
