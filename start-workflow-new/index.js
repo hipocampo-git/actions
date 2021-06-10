@@ -60,7 +60,7 @@ core.group('Doing something async', async () => {
                 sizes)
                VALUES ("${branchNameOutput}", ${prIdOutput},
                 "${herokuAppOutput}", "${instanceNameOutput}",
-                 "${testTagsOutput}", "${JSON.stringify(sizesOutput)}")`;
+                 "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
 
           console.log(query);
 
