@@ -62,6 +62,8 @@ core.group('Doing something async', async () => {
                 "${herokuAppOutput}", "${instanceNameOutput}",
                  "${testTagsOutput}", "${JSON.stringify(sizesOutput)}")`;
 
+          console.log(query);
+
           await connection.execute(query);
         } else {
           // Check if there's a database suffix value and if so, append it to
