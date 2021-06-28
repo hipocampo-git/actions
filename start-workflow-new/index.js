@@ -16,6 +16,7 @@ core.group('Doing something async', async () => {
     let branchNameOutput = '';
     let instanceNameOutput = '';
     let testTagsOutput = 'smoke';
+    let dbCloneSourceOutput = 'test-clone-source-ver8';
     let sizesOutput = {
       value: ['large']
     };
@@ -57,10 +58,11 @@ core.group('Doing something async', async () => {
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
-                sizes)
-               VALUES ("${branchNameOutput}", ${prIdOutput},
-                "${herokuAppOutput}", "${instanceNameOutput}",
-                 "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
+                sizes, db_clone_source)
+               VALUES ('${branchNameOutput}', ${prIdOutput},
+                '${herokuAppOutput}', '${instanceNameOutput}',
+                 '${testTagsOutput}', '${JSON.stringify(sizesOutput)}',
+                 '${dbCloneSourceOutput}')`;
 
           console.log(query);
 
@@ -82,6 +84,7 @@ core.group('Doing something async', async () => {
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
           testTagsOutput = readResponse[0].test_tags;
+          dbCloneSourceOutput = readResponse[0].db_clone_source;
           // We'll use the default in the action code if the database contains
           // null for sizes.
           if (readResponse[0].sizes !== null) {
@@ -139,6 +142,7 @@ core.group('Doing something async', async () => {
     core.setOutput("skip-deploy", skipDeployOutput);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
+    core.setOutput("db-clone-source", JSON.stringify(dbCloneSourceOutput));
   } catch (error) {
     core.setFailed(error.message);
   } finally {

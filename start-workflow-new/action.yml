@@ -25,6 +25,8 @@ outputs:
     description: "Which tags to use for filtering the cypress tests"
   sizes:
     description: "size matrix for the cypress tests in stringified JSON"
+  db-clone-source:
+    description: "source db to clone from"
 runs:
   using: "node12"
   main: "index.js"
