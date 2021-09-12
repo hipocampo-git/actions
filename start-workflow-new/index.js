@@ -16,10 +16,6 @@ core.group('Doing something async', async () => {
     let branchNameOutput = '';
     let instanceNameOutput = '';
     let testTagsOutput = 'smoke';
-<<<<<<< HEAD
-=======
-    let dbCloneSourceOutput = 'test-clone-source-ver8';
->>>>>>> 9603f81 (changes)
     let sizesOutput = {
       value: ['large']
     };
@@ -61,18 +57,10 @@ core.group('Doing something async', async () => {
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
-<<<<<<< HEAD
                 sizes)
                VALUES ("${branchNameOutput}", ${prIdOutput},
                 "${herokuAppOutput}", "${instanceNameOutput}",
                  "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
-=======
-                sizes, db_clone_source)
-               VALUES ('${branchNameOutput}', ${prIdOutput},
-                '${herokuAppOutput}', '${instanceNameOutput}',
-                 '${testTagsOutput}', '${JSON.stringify(sizesOutput)}',
-                 '${dbCloneSourceOutput}')`;
->>>>>>> 9603f81 (changes)
 
           console.log(query);
 
@@ -94,10 +82,6 @@ core.group('Doing something async', async () => {
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
           testTagsOutput = readResponse[0].test_tags;
-<<<<<<< HEAD
-=======
-          dbCloneSourceOutput = readResponse[0].db_clone_source;
->>>>>>> 9603f81 (changes)
           // We'll use the default in the action code if the database contains
           // null for sizes.
           if (readResponse[0].sizes !== null) {
@@ -106,10 +90,6 @@ core.group('Doing something async', async () => {
         }
         break;
       case 'push':
-<<<<<<< HEAD
-=======
-        // Case for when a PR is merged with master.
->>>>>>> 9603f81 (changes)
         const commitMessage = github.context.payload.head_commit.message;
         let begin = commitMessage.indexOf('(#') + '(#'.length;
         let end = commitMessage.indexOf(')', begin);
@@ -129,11 +109,7 @@ core.group('Doing something async', async () => {
         const [readResponse2] =
             await connection.execute(readQuery2);
 
-<<<<<<< HEAD
-        // These values should be fixed for push to master events
-=======
         // These values should be immutable for push to master events
->>>>>>> 9603f81 (changes)
         testTagsOutput = 'all';
         sizesOutput = {
           value: ['large', 'small']
@@ -146,16 +122,13 @@ core.group('Doing something async', async () => {
         } else {
           instanceNameOutput = readResponse2[0].database_name;
           branchNameOutput = readResponse2[0].branch;
-        }
-<<<<<<< HEAD
-=======
 
-        // Have gone back and forth on this, but null (non-string value)
-        // should be the correct literal for the comparison below.
-        if (readResponse2[0].database_suffix !== null) {
-          instanceNameOutput += `-${readResponse2[0].database_suffix}`;
+          // Have gone back and forth on this, but null (non-string value)
+          // should be the correct literal for the comparison below.
+          if (readResponse2[0].database_suffix !== null) {
+            instanceNameOutput += `-${readResponse2[0].database_suffix}`;
+          }
         }
->>>>>>> 9603f81 (changes)
         break;
       case 'default':
         // Default is workflow dispatch right now
@@ -172,10 +145,6 @@ core.group('Doing something async', async () => {
     core.setOutput("skip-deploy", skipDeployOutput);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
-<<<<<<< HEAD
-=======
-    core.setOutput("db-clone-source", JSON.stringify(dbCloneSourceOutput));
->>>>>>> 9603f81 (changes)
   } catch (error) {
     core.setFailed(error.message);
   } finally {
