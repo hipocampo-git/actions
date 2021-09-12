@@ -1,4 +1,2 @@
-__tests__/runner/*
-node_modules
-coverage
 .idea/
+/node_modules/
