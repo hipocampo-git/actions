@@ -1,0 +1,13 @@
+name: "Teardown"
+author: "Oliver Pike"
+description: "Deletes the cloned databases and buckets"
+inputs:
+  pull-request-id:
+    description: "pull request #"
+    required: true
+  token:
+    description: "Github Token"
+    required: true
+runs:
+  using: "node12"
+  main: "index.js"

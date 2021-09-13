@@ -109,7 +109,7 @@ core.group('Doing something async', async () => {
         const [readResponse2] =
             await connection.execute(readQuery2);
 
-        // These values should be fixed for push to master events
+        // These values should be immutable for push to master events
         testTagsOutput = 'all';
         sizesOutput = {
           value: ['large', 'small']
@@ -122,6 +122,12 @@ core.group('Doing something async', async () => {
         } else {
           instanceNameOutput = readResponse2[0].database_name;
           branchNameOutput = readResponse2[0].branch;
+
+          // Have gone back and forth on this, but null (non-string value)
+          // should be the correct literal for the comparison below.
+          if (readResponse2[0].database_suffix !== null) {
+            instanceNameOutput += `-${readResponse2[0].database_suffix}`;
+          }
         }
         break;
       case 'default':
