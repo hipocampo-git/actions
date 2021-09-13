@@ -55,7 +55,6 @@ core.group('Doing something async', async () => {
           await file.delete();
         };
         console.log(`Deleting bucket: ${bucket.name}`);
-        // await storage.bucket(bucketName).delete();
         await bucket.delete();
       }
     }
