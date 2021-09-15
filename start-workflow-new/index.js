@@ -5,7 +5,7 @@ const mysqlPromise = require('mysql2/promise');
 core.group('Doing something async', async () => {
   let connection = null;
   try {
-    core.startGroup("env variables");
+    core.startGroup('env variables');
     console.log(JSON.stringify(process.env, null, "\t"));
     core.endGroup();
 
@@ -23,6 +23,9 @@ core.group('Doing something async', async () => {
 
     const herokuAppPrefix = 'hipocampo-pr-';
     const instancePrefix = 'hipocampo-test-ci-';
+
+    core.debug('HERE AA');
+    console.log('HERE BB');
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
