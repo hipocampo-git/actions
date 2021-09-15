@@ -51,7 +51,11 @@ core.group('Doing something async', async () => {
       case 'workflow_dispatch':
         console.log('HERE 20');
         console.log(JSON.stringify(github.context.payload));
-        branchNameOutput =  github.context.payload.pull_request.head.ref;
+        if (eventName === 'pull_request') {
+          branchNameOutput = github.context.payload.pull_request.head.ref;
+        } else {
+          branchNameOutput = github.context.payload.ref;
+        }
         prIdOutput = github.context.payload.number;
         instanceNameOutput = instancePrefix + prIdOutput;
 
