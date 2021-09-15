@@ -45,6 +45,7 @@ core.group('Doing something async', async () => {
 
     switch (eventName) {
       case 'pull_request':
+      case 'workflow_dispatch':
         branchNameOutput =  github.context.payload.pull_request.head.ref;
         prIdOutput = github.context.payload.number;
         instanceNameOutput = instancePrefix + prIdOutput;
@@ -133,6 +134,7 @@ core.group('Doing something async', async () => {
       case 'default':
         // Default is workflow dispatch right now
         // TODO: figure out the specific string for workflow dispatch events.
+        core.setFailed(`Event ${eventName} not found`);
         break;
     }
 
