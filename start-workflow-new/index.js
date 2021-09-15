@@ -59,6 +59,11 @@ core.group('Doing something async', async () => {
         prIdOutput = github.context.payload.number;
         instanceNameOutput = instancePrefix + prIdOutput;
 
+        console.log('HERE 21');
+        console.log(prIdOutput);
+        console.log(instanceNameOutput);
+        console.log(branchNameOutput);
+
         const [readResponse] =
             await connection.execute(readQueryTemplate(prIdOutput));
 
