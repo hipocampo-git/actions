@@ -25,7 +25,7 @@ core.group('Doing something async', async () => {
     const instancePrefix = 'hipocampo-test-ci-';
 
     core.debug('HERE AA');
-    console.log('HERE BB');
+    console.log('HERE 10');
 
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
@@ -49,6 +49,7 @@ core.group('Doing something async', async () => {
     switch (eventName) {
       case 'pull_request':
       case 'workflow_dispatch':
+        console.log('HERE 20');
         console.log(JSON.stringify(github.context.payload));
         branchNameOutput =  github.context.payload.pull_request.head.ref;
         prIdOutput = github.context.payload.number;
