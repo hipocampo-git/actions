@@ -53,6 +53,12 @@ core.group('Doing something async', async () => {
     switch (eventName) {
       case 'pull_request':
       case 'workflow_dispatch':
+        // NOTE: Right now we have to be careful with conflicts between the
+        //       workflow dispatch events and the pull_request events.
+        //       The turnstyle github action treats them separately so the
+        //       actions will run concurrently but they will conflict as they
+        //       use the same heroku review app instance.
+        // TODO: Figure out how to resolve this potential conflict.
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
           prIdOutput = github.context.payload.number;
