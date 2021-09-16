@@ -159,8 +159,6 @@ core.group('Doing something async', async () => {
         }
         break;
       case 'default':
-        // Default is workflow dispatch right now
-        // TODO: figure out the specific string for workflow dispatch events.
         core.setFailed(`Event ${eventName} not found`);
         break;
     }
