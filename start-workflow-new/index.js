@@ -1,11 +1,12 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
+const mysql = require ('mysql2');
 
 core.group('Doing something async', async () => {
   let connection = null;
   try {
-    core.startGroup("env variables");
+    core.startGroup('env variables');
     console.log(JSON.stringify(process.env, null, "\t"));
     core.endGroup();
 
@@ -43,14 +44,47 @@ core.group('Doing something async', async () => {
       return `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
     };
 
+    let readQueryTemplateDispatch = (branch) => {
+      return `SELECT * FROM workflows WHERE branch=${mysql.escape(branch)}`;
+    };
+
+    let readResponse;
+
     switch (eventName) {
       case 'pull_request':
-        branchNameOutput =  github.context.payload.pull_request.head.ref;
-        prIdOutput = github.context.payload.number;
-        instanceNameOutput = instancePrefix + prIdOutput;
+      case 'workflow_dispatch':
+        // NOTE: Right now we have to be careful with conflicts between the
+        //       workflow dispatch events and the pull_request events.
+        //       The turnstyle github action treats them separately so the
+        //       actions will run concurrently but they will conflict as they
+        //       use the same heroku review app instance.
+        // TODO: Figure out how to resolve this potential conflict.
+        if (eventName === 'pull_request') {
+          branchNameOutput = github.context.payload.pull_request.head.ref;
+          prIdOutput = github.context.payload.number;
 
-        const [readResponse] =
-            await connection.execute(readQueryTemplate(prIdOutput));
+          [readResponse] =
+              await connection.execute(readQueryTemplate(prIdOutput));
+        } else {
+          branchNameOutput = github.context.payload.ref.split('/').pop();
+          [readResponse] =
+              await connection.execute(
+                  readQueryTemplateDispatch(branchNameOutput));
+
+          if (readResponse.length === 0) {
+            console.log('Issue doing a look up for the workflow record' +
+                'This could be due to the fact that the PR # has changed ' +
+                ' (perhaps the PR was closed and reopened?)');
+            core.setFailed(
+                'ERROR: ' +
+                'Workflow entry needs to already exist for dispatch events');
+            return;
+          }
+
+          prIdOutput = readResponse[0].pull_request_id;
+        }
+
+        instanceNameOutput = instancePrefix + prIdOutput;
 
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
@@ -58,11 +92,11 @@ core.group('Doing something async', async () => {
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
                 sizes)
-               VALUES ("${branchNameOutput}", ${prIdOutput},
-                "${herokuAppOutput}", "${instanceNameOutput}",
-                 "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
-
-          console.log(query);
+               VALUES (${mysql.escape(branchNameOutput)}, ${prIdOutput},
+                 ${mysql.escape(herokuAppOutput)},
+                 ${mysql.escape(instanceNameOutput)},
+                 ${mysql.escape(testTagsOutput)},
+                 ${mysql.escape(JSON.stringify(sizesOutput))})`;
 
           await connection.execute(query);
         } else {
@@ -131,8 +165,7 @@ core.group('Doing something async', async () => {
         }
         break;
       case 'default':
-        // Default is workflow dispatch right now
-        // TODO: figure out the specific string for workflow dispatch events.
+        core.setFailed(`Event ${eventName} not found`);
         break;
     }
 
