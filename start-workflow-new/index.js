@@ -54,6 +54,12 @@ core.group('Doing something async', async () => {
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
         } else {
+          const commitMessage = github.context.payload.head_commit.message;
+          console.log('HERE 20.5');
+          console.log(commitMessage);
+          let begin = commitMessage.indexOf('(#') + '(#'.length;
+          let end = commitMessage.indexOf(')', begin);
+          prIdOutput = commitMessage.substring(begin, end).trim();
           branchNameOutput = github.context.payload.ref;
         }
         prIdOutput = github.context.payload.number;
