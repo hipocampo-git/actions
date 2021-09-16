@@ -44,8 +44,7 @@ core.group('Doing something async', async () => {
     });
 
     let readQueryTemplate = (prId) => {
-      return
-      `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
+      return `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
     };
 
     let readQueryTemplateDispatch = (branch) => {
@@ -62,8 +61,14 @@ core.group('Doing something async', async () => {
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
           prIdOutput = github.context.payload.number;
+
+          console.log('HERE 20.2');
+          console.log(branchNameOutput);
+          console.log(prIdOutput);
+
           [readResponse] =
               await connection.execute(readQueryTemplate(prIdOutput));
+          console.log(JSON.stringify(readResponse));
         } else {
           // prIdOutput = commitMessage.substring(begin, end).trim();
           branchNameOutput = github.context.payload.ref.split('/').pop();
