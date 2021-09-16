@@ -57,20 +57,18 @@ core.group('Doing something async', async () => {
       case 'pull_request':
       case 'workflow_dispatch':
         console.log('HERE 20');
-        // console.log(JSON.stringify(github.context.payload));
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
           prIdOutput = github.context.payload.number;
 
-          console.log('HERE 20.2');
-          console.log(branchNameOutput);
-          console.log(prIdOutput);
+          // console.log('HERE 20.2');
+          // console.log(branchNameOutput);
+          // console.log(prIdOutput);
 
           [readResponse] =
               await connection.execute(readQueryTemplate(prIdOutput));
-          console.log(JSON.stringify(readResponse));
+          // console.log(JSON.stringify(readResponse));
         } else {
-          // prIdOutput = commitMessage.substring(begin, end).trim();
           branchNameOutput = github.context.payload.ref.split('/').pop();
           console.log('HERE 20.5');
           console.log(branchNameOutput);
@@ -91,12 +89,7 @@ core.group('Doing something async', async () => {
           prIdOutput = readResponse[0].pull_request_id;
         }
 
-        // core.setFailed('HERE 40');
-        // return;
-
-
         instanceNameOutput = instancePrefix + prIdOutput;
-
 
         console.log('HERE 21');
         console.log(prIdOutput);
