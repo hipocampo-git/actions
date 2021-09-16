@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
-const mysqlEscape = require ('mysql2/escape');
+const mysql = require ('mysql2');
 
 core.group('Doing something async', async () => {
   let connection = null;
@@ -44,11 +44,12 @@ core.group('Doing something async', async () => {
     });
 
     let readQueryTemplate = (prId) => {
-      return `SELECT * FROM workflows WHERE pull_request_id=${mysqlEscape(prId)}`;
+      return
+      `SELECT * FROM workflows WHERE pull_request_id=${mysql.escape(prId)}`;
     };
 
     let readQueryTemplateDispatch = (branch) => {
-      return `SELECT * FROM workflows WHERE branch=${mysqlEscape(branch)}`;
+      return `SELECT * FROM workflows WHERE branch=${mysql.escape(branch)}`;
     };
 
     let readResponse;
@@ -67,7 +68,8 @@ core.group('Doing something async', async () => {
           // prIdOutput = commitMessage.substring(begin, end).trim();
           branchNameOutput = github.context.payload.ref;
           [readResponse] =
-              await connection.execute(readQueryTemplate(branchNameOutput));
+              await connection.execute(
+                  readQueryTemplateDispatch(branchNameOutput));
 
           if (readResponse.length === 0) {
             core.setFailed(
