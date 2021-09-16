@@ -45,7 +45,7 @@ core.group('Doing something async', async () => {
 
     let readQueryTemplate = (prId) => {
       return
-      `SELECT * FROM workflows WHERE pull_request_id=${mysql.escape(prId)}`;
+      `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
     };
 
     let readQueryTemplateDispatch = (branch) => {
@@ -58,7 +58,7 @@ core.group('Doing something async', async () => {
       case 'pull_request':
       case 'workflow_dispatch':
         console.log('HERE 20');
-        console.log(JSON.stringify(github.context.payload));
+        // console.log(JSON.stringify(github.context.payload));
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
           prIdOutput = github.context.payload.number;
@@ -86,8 +86,8 @@ core.group('Doing something async', async () => {
           prIdOutput = readResponse[0].pull_request_id;
         }
 
-        core.setFailed('HERE 40');
-        return;
+        // core.setFailed('HERE 40');
+        // return;
 
 
         instanceNameOutput = instancePrefix + prIdOutput;
