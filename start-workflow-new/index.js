@@ -74,7 +74,11 @@ core.group('Doing something async', async () => {
                   readQueryTemplateDispatch(branchNameOutput));
 
           if (readResponse.length === 0) {
+            console.log('Issue doing a look up for the workflow record' +
+                'This could be due to the fact that the PR # has changed ' +
+                ' (perhaps the PR was closed and reopened?)');
             core.setFailed(
+                'ERROR: ' +
                 'Workflow entry needs to already exist for dispatch events');
             return;
           }
@@ -89,16 +93,17 @@ core.group('Doing something async', async () => {
         console.log(prIdOutput);
         console.log(instanceNameOutput);
 
-
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
                 sizes)
-               VALUES ("${branchNameOutput}", ${prIdOutput},
-                "${herokuAppOutput}", "${instanceNameOutput}",
-                 "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
+               VALUES (${mysql.escape(branchNameOutput)}, ${prIdOutput},
+                 ${mysql.escape(herokuAppOutput)},
+                 ${mysql.escape(instanceNameOutput)},
+                 ${mysql.escape(testTagsOutput)},
+                 ${mysql.escape(JSON.stringify(sizesOutput))})`;
 
           console.log(query);
 
