@@ -66,7 +66,7 @@ core.group('Doing something async', async () => {
               await connection.execute(readQueryTemplate(prIdOutput));
         } else {
           // prIdOutput = commitMessage.substring(begin, end).trim();
-          branchNameOutput = github.context.payload.ref.splice('/').pop();
+          branchNameOutput = github.context.payload.ref.split('/').pop();
           console.log('HERE 20.5');
           console.log(branchNameOutput);
           [readResponse] =
