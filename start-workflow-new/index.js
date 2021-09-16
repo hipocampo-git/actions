@@ -86,6 +86,10 @@ core.group('Doing something async', async () => {
           prIdOutput = readResponse[0].pull_request_id;
         }
 
+        core.setFailed('HERE 40');
+        return;
+
+
         instanceNameOutput = instancePrefix + prIdOutput;
 
 
