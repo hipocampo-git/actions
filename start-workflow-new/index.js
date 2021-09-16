@@ -66,7 +66,9 @@ core.group('Doing something async', async () => {
               await connection.execute(readQueryTemplate(prIdOutput));
         } else {
           // prIdOutput = commitMessage.substring(begin, end).trim();
-          branchNameOutput = github.context.payload.ref;
+          branchNameOutput = github.context.payload.ref.splice('/').pop();
+          console.log('HERE 20.5');
+          console.log(branchNameOutput);
           [readResponse] =
               await connection.execute(
                   readQueryTemplateDispatch(branchNameOutput));
@@ -86,7 +88,7 @@ core.group('Doing something async', async () => {
         console.log('HERE 21');
         console.log(prIdOutput);
         console.log(instanceNameOutput);
-        console.log(branchNameOutput);
+
 
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
