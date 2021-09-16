@@ -99,23 +99,23 @@ core.group('Doing something async', async () => {
 
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
-          // const query =
-          //     `INSERT INTO workflows
-          //      (branch, pull_request_id, heroku_app, database_name, test_tags,
-          //       sizes)
-          //      VALUES (${mysql.escape(branchNameOutput)}, ${prIdOutput},
-          //        ${mysql.escape(herokuAppOutput)},
-          //        ${mysql.escape(instanceNameOutput)},
-          //        ${mysql.escape(testTagsOutput)},
-          //        ${mysql.escape(JSON.stringify(sizesOutput))})`;
-
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
                 sizes)
-               VALUES ("${branchNameOutput}", ${prIdOutput},
-                "${herokuAppOutput}", "${instanceNameOutput}",
-                 "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
+               VALUES (${mysql.escape(branchNameOutput)}, ${prIdOutput},
+                 ${mysql.escape(herokuAppOutput)},
+                 ${mysql.escape(instanceNameOutput)},
+                 ${mysql.escape(testTagsOutput)},
+                 ${mysql.escape(JSON.stringify(sizesOutput))})`;
+
+          // const query =
+          //     `INSERT INTO workflows
+          //      (branch, pull_request_id, heroku_app, database_name, test_tags,
+          //       sizes)
+          //      VALUES ("${branchNameOutput}", ${prIdOutput},
+          //       "${herokuAppOutput}", "${instanceNameOutput}",
+          //        "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
 
           console.log(query);
 
