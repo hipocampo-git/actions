@@ -25,9 +25,6 @@ core.group('Doing something async', async () => {
     const herokuAppPrefix = 'hipocampo-pr-';
     const instancePrefix = 'hipocampo-test-ci-';
 
-    core.debug('HERE AA');
-    console.log('HERE 10');
-
     const dbUser = process.env.DBUSER;
     const dbPassword = process.env.DBPASSWORD;
     const dbHost = '127.0.0.1';
@@ -56,22 +53,14 @@ core.group('Doing something async', async () => {
     switch (eventName) {
       case 'pull_request':
       case 'workflow_dispatch':
-        console.log('HERE 20');
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
           prIdOutput = github.context.payload.number;
 
-          // console.log('HERE 20.2');
-          // console.log(branchNameOutput);
-          // console.log(prIdOutput);
-
           [readResponse] =
               await connection.execute(readQueryTemplate(prIdOutput));
-          // console.log(JSON.stringify(readResponse));
         } else {
           branchNameOutput = github.context.payload.ref.split('/').pop();
-          console.log('HERE 20.5');
-          console.log(branchNameOutput);
           [readResponse] =
               await connection.execute(
                   readQueryTemplateDispatch(branchNameOutput));
@@ -91,10 +80,6 @@ core.group('Doing something async', async () => {
 
         instanceNameOutput = instancePrefix + prIdOutput;
 
-        console.log('HERE 21');
-        console.log(prIdOutput);
-        console.log(instanceNameOutput);
-
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
           const query =
@@ -106,16 +91,6 @@ core.group('Doing something async', async () => {
                  ${mysql.escape(instanceNameOutput)},
                  ${mysql.escape(testTagsOutput)},
                  ${mysql.escape(JSON.stringify(sizesOutput))})`;
-
-          // const query =
-          //     `INSERT INTO workflows
-          //      (branch, pull_request_id, heroku_app, database_name, test_tags,
-          //       sizes)
-          //      VALUES ("${branchNameOutput}", ${prIdOutput},
-          //       "${herokuAppOutput}", "${instanceNameOutput}",
-          //        "${testTagsOutput}", '${JSON.stringify(sizesOutput)}')`;
-
-          console.log(query);
 
           await connection.execute(query);
         } else {
