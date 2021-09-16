@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const mysqlPromise = require('mysql2/promise');
+const mysqlEscape = require ('mysql2/escape');
 
 core.group('Doing something async', async () => {
   let connection = null;
@@ -43,8 +44,14 @@ core.group('Doing something async', async () => {
     });
 
     let readQueryTemplate = (prId) => {
-      return `SELECT * FROM workflows WHERE pull_request_id=${prId}`;
+      return `SELECT * FROM workflows WHERE pull_request_id=${mysqlEscape(prId)}`;
     };
+
+    let readQueryTemplateDispatch = (branch) => {
+      return `SELECT * FROM workflows WHERE branch=${mysqlEscape(branch)}`;
+    };
+
+    let readResponse;
 
     switch (eventName) {
       case 'pull_request':
@@ -53,25 +60,31 @@ core.group('Doing something async', async () => {
         console.log(JSON.stringify(github.context.payload));
         if (eventName === 'pull_request') {
           branchNameOutput = github.context.payload.pull_request.head.ref;
+          prIdOutput = github.context.payload.number;
+          [readResponse] =
+              await connection.execute(readQueryTemplate(prIdOutput));
         } else {
-          const commitMessage = github.context.payload.head_commit.message;
-          console.log('HERE 20.5');
-          console.log(commitMessage);
-          let begin = commitMessage.indexOf('(#') + '(#'.length;
-          let end = commitMessage.indexOf(')', begin);
-          prIdOutput = commitMessage.substring(begin, end).trim();
+          // prIdOutput = commitMessage.substring(begin, end).trim();
           branchNameOutput = github.context.payload.ref;
+          [readResponse] =
+              await connection.execute(readQueryTemplate(branchNameOutput));
+
+          if (readResponse.length === 0) {
+            core.setFailed(
+                'Workflow entry needs to already exist for dispatch events');
+            return;
+          }
+
+          prIdOutput = readResponse[0].pull_request_id;
         }
-        prIdOutput = github.context.payload.number;
+
         instanceNameOutput = instancePrefix + prIdOutput;
+
 
         console.log('HERE 21');
         console.log(prIdOutput);
         console.log(instanceNameOutput);
         console.log(branchNameOutput);
-
-        const [readResponse] =
-            await connection.execute(readQueryTemplate(prIdOutput));
 
         if (readResponse.length === 0) {
           console.log('pull request id not found, creating new ci entry.');
