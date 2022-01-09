@@ -21,6 +21,7 @@ core.group('Doing something async', async () => {
       value: ['large']
     };
     let skipDeployOutput = false;
+    let disableCache = false;
 
     const herokuAppPrefix = 'hipocampo-pr-';
     const instancePrefix = 'hipocampo-test-ci-';
@@ -115,6 +116,7 @@ core.group('Doing something async', async () => {
           }
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
+          disableCache = (!! readResponse[0].no_cache);
           testTagsOutput = readResponse[0].test_tags;
           // We'll use the default in the action code if the database contains
           // null for sizes.
@@ -173,9 +175,9 @@ core.group('Doing something async', async () => {
 
     core.setOutput("pull-request-id", prIdOutput);
     core.setOutput("heroku-app-name", herokuAppOutput);
-    core.setOutput("branch-name", branchNameOutput);
     core.setOutput("instance-name", instanceNameOutput);
     core.setOutput("skip-deploy", skipDeployOutput);
+    core.setOutput("no-cache", disableCache);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
   } catch (error) {
