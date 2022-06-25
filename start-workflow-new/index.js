@@ -21,7 +21,12 @@ core.group('Doing something async', async () => {
       value: ['large']
     };
     let skipDeployOutput = false;
+    // This isn't the best implementation for disableCache and continueWorkflow
+    // since we are setting defaults in 2 places - both here and in the
+    // database. On the initial run when the database record is inserted, the
+    // database default gets ignored.
     let disableCache = false;
+    let continueWorkflow = true;
 
     const herokuAppPrefix = 'hipocampo-pr-';
     const instancePrefix = 'hipocampo-test-ci-';
@@ -117,6 +122,7 @@ core.group('Doing something async', async () => {
 
           skipDeployOutput = (!! readResponse[0].skip_deploy);
           disableCache = (!! readResponse[0].no_cache);
+          continueWorkflow = (!! readResponse[0].continue_workflow);
           testTagsOutput = readResponse[0].test_tags;
           // We'll use the default in the action code if the database contains
           // null for sizes.
@@ -178,6 +184,7 @@ core.group('Doing something async', async () => {
     core.setOutput("instance-name", instanceNameOutput);
     core.setOutput("skip-deploy", skipDeployOutput);
     core.setOutput("no-cache", disableCache);
+    core.setOutput("continue-workflow", continueWorkflow);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
   } catch (error) {
