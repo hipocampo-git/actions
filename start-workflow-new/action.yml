@@ -27,6 +27,8 @@ outputs:
     description: "Which tags to use for filtering the cypress tests"
   sizes:
     description: "size matrix for the cypress tests in stringified JSON"
+  continue-workflow:
+    description: "boolean that controls if the caller action should continue their workflow or exit"
 runs:
   using: "node16"
   main: "index.js"
