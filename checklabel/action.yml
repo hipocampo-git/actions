@@ -15,5 +15,5 @@ outputs:
   label:
     description: "heroku review app host from a PR label"
 runs:
-  using: "node12"
+  using: "node16"
   main: "./dist/index.js"

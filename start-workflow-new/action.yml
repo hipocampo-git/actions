@@ -28,5 +28,5 @@ outputs:
   sizes:
     description: "size matrix for the cypress tests in stringified JSON"
 runs:
-  using: "node12"
+  using: "node16"
   main: "index.js"
