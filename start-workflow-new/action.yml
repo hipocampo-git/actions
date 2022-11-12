@@ -30,5 +30,5 @@ outputs:
   continue-workflow:
     description: "boolean that controls if the caller action should continue their workflow or exit"
 runs:
-  using: "node12"
+  using: "node16"
   main: "index.js"
