@@ -6,7 +6,6 @@
     "start": "node ./index.js",
     "test": "jest",
     "build": "npx @vercel/ncc build && npx convert-action",
-    "actions:build": "npx ncc build parse-commit-message/index.js -o parse-commit-message/dist"
   },
   "dependencies": {
     "@actions/core": "1.10.0",
