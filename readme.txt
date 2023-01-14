@@ -5,4 +5,5 @@ the individual actions.
 It appears that .github/actions can be removed (we haven't had a chance to
 test it yet).
 
- Regarding having the node_modules checked in, please see HIP-949
+Regarding having the node_modules checked in for individual actions,
+please see HIP-949
