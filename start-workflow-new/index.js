@@ -17,6 +17,7 @@ core.group('Doing something async', async () => {
     let branchNameOutput = '';
     let instanceNameOutput = '';
     let testTagsOutput = 'smoke';
+    let singleSpecOutput = '';
     let sizesOutput = {
       value: ['large']
     };
@@ -102,6 +103,7 @@ core.group('Doing something async', async () => {
                  ${mysql.escape(herokuAppOutput)},
                  ${mysql.escape(instanceNameOutput)},
                  ${mysql.escape(testTagsOutput)},
+                 ${mysql.escape(singleSpecOutput)},
                  ${mysql.escape(JSON.stringify(sizesOutput))})`;
 
           await connection.execute(query);
@@ -124,6 +126,7 @@ core.group('Doing something async', async () => {
           disableCache = (!! readResponse[0].no_cache);
           continueWorkflow = (!! readResponse[0].continue_workflow);
           testTagsOutput = readResponse[0].test_tags;
+          singleSpecOutput = readResponse[0].singleSpec;
           // We'll use the default in the action code if the database contains
           // null for sizes.
           if (readResponse[0].sizes !== null) {
@@ -185,6 +188,7 @@ core.group('Doing something async', async () => {
     core.setOutput("skip-deploy", skipDeployOutput);
     core.setOutput("no-cache", disableCache);
     core.setOutput("continue-workflow", continueWorkflow);
+    core.setOutput("single-spec", singleSpecOutput);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
   } catch (error) {
