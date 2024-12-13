@@ -18,6 +18,7 @@ core.group('Doing something async', async () => {
     let instanceNameOutput = '';
     let testTagsOutput = 'smoke';
     let singleSpecOutput = '';
+    let visualReviewOutput = 'none';
     let sizesOutput = {
       value: ['large']
     };
@@ -104,6 +105,7 @@ core.group('Doing something async', async () => {
                  ${mysql.escape(instanceNameOutput)},
                  ${mysql.escape(testTagsOutput)},
                  ${mysql.escape(singleSpecOutput)},
+                 ${mysql.escape(visualReviewOutput)},
                  ${mysql.escape(JSON.stringify(sizesOutput))})`;
 
           await connection.execute(query);
@@ -127,6 +129,7 @@ core.group('Doing something async', async () => {
           continueWorkflow = (!! readResponse[0].continue_workflow);
           testTagsOutput = readResponse[0].test_tags;
           singleSpecOutput = readResponse[0].singleSpec;
+          visualReviewOutput = readResponse[0].visualReview;
           // We'll use the default in the action code if the database contains
           // null for sizes.
           if (readResponse[0].sizes !== null) {
@@ -189,6 +192,7 @@ core.group('Doing something async', async () => {
     core.setOutput("no-cache", disableCache);
     core.setOutput("continue-workflow", continueWorkflow);
     core.setOutput("single-spec", singleSpecOutput);
+    core.setOutput("visual-review", visualReviewOutput);
     core.setOutput("test-tags", testTagsOutput);
     core.setOutput("sizes", JSON.stringify(sizesOutput));
   } catch (error) {
