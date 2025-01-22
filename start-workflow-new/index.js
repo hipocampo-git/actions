@@ -99,7 +99,7 @@ core.group('Doing something async', async () => {
           const query =
               `INSERT INTO workflows
                (branch, pull_request_id, heroku_app, database_name, test_tags,
-                sizes)
+                singleSpec, visualReview, sizes)
                VALUES (${mysql.escape(branchNameOutput)}, ${prIdOutput},
                  ${mysql.escape(herokuAppOutput)},
                  ${mysql.escape(instanceNameOutput)},
